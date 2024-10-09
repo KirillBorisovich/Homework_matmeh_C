@@ -2,20 +2,35 @@
 #include <string.h>
 #include <stdbool.h>
 #include <locale.h>
+#include <stdlib.h>
+
 
 bool palindrome(const char* string) {
 	int stringLen = strlen(string);
-	for (int i = 0; i < stringLen / 2; ++i) {
-		if ((string[i] != string[stringLen - i - 1])) {
+	int counter = 0;
+	char *stringWithoutSpaces = (char*)calloc(stringLen + 1, sizeof(char));
+	if (stringWithoutSpaces == NULL) {
+		return -1;
+	}
+	for (int i = 0; i < stringLen; ++i) {
+		if (string[i] != ' ') {
+			stringWithoutSpaces[counter] = string[i];
+			++counter;
+		}
+	}
+	for (int i = 0; i < counter / 2; ++i) {
+		if ((stringWithoutSpaces[i] != stringWithoutSpaces[counter - i - 1])) {
+			free(stringWithoutSpaces);
 			return false;
 		}
 	}
-		return true;
+	free(stringWithoutSpaces);
+	return true;
 }
 
 bool testPalindrome() {
-	return palindrome("БУБ") && palindrome("BUUB") && palindrome("буб")
-		&& !palindrome("БУЛБ") && !palindrome("BUK") && palindrome("buub");
+	return palindrome("БУБ") && palindrome("BUU B") && palindrome("б уб")
+		&& !palindrome(" БУЛБ ") && !palindrome("B UK") && palindrome("buub ");
 }
 
 int main(void) {
@@ -24,6 +39,11 @@ int main(void) {
 		printf("Test failed");
 		return -1;
 	}
-	char * string = "BUUIB";
-	printf("%d", palindrome(string));
+	char * string = " B U U B";
+	if (palindrome(string)) {
+		printf("Строка является палиндромом\n");
+	}
+	else {
+		printf("Строка не является палиндромом\n");
+	}
 }
