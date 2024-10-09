@@ -17,15 +17,7 @@ bool arrayComparison(int array1[], int array2[], int lenghs) {
 }
 
 void shellSorting(int array[], int lengh) {
-    for (int i = lengh / 2; i > 0; i /= 2) {
-        for (int k = i; k < lengh; ++k) {
-            for (int j = k - i; j >= 0 && array[j] > array[j + i]; j -= i) {
-                int temporaryVariable = array[j];
-                array[j] = array[j + i];
-                array[j + i] = temporaryVariable;
-            }
-        }
-    }
+    
 }
 
 
