@@ -8,17 +8,22 @@ typedef struct {
     char phone[20];
 } NameAndPhoneNumber;
 
-int readFromFile(FILE *file, NameAndPhoneNumber **data, int *numberOfLines) {
+int readFromFile(NameAndPhoneNumber **data, int *numberOfLines) {
+    FILE* file = fopen("Database.txt", "r");
+    if (file == NULL) {
+        printf("File not found!\n");
+        return 1;
+    }
     int linesRead = 0;
-    while (linesRead < 100) { // Проверка на переполнение массива
+    while (linesRead < 100) { 
         char *buffer = malloc(sizeof(char) * 100);
-        if (buffer == NULL) { // Проверка на успешное выделение памяти
+        if (buffer == NULL) { 
             printf("Memory allocation failed!\n");
             return 2;
         }
 
-        if (fgets(buffer, 100, file) != NULL) { // Чтение строки
-            buffer[strcspn(buffer, "\n")] = 0; // Удаление символа новой строки
+        if (fgets(buffer, 100, file) != NULL) {
+            buffer[strcspn(buffer, "\n")] = 0; 
             NameAndPhoneNumber *temporaryVariable = malloc(sizeof(NameAndPhoneNumber));
             if (temporaryVariable == NULL) {
                 printf("Memory allocation failed!\n");
@@ -35,16 +40,16 @@ int readFromFile(FILE *file, NameAndPhoneNumber **data, int *numberOfLines) {
             }
             temporaryVariable->name[spaceIndex] = '\0';
             temporaryVariable->phone[j] = '\0';
-            data[linesRead] = temporaryVariable; // Сохранение указателя на структру
+            data[linesRead] = temporaryVariable;
             ++linesRead;
         }
         else {
-            free(buffer); // Освобождение памяти, если чтение не удалось
+            free(buffer);
             break;
         }
         free(buffer);
     }
-
+    fclose(file);
     *numberOfLines = linesRead;
     return 0;
 }
@@ -124,16 +129,10 @@ void findNameByPhone(NameAndPhoneNumber **data, int numberOfLines) {
 }
 
 int main(void) {
-    FILE* file = fopen("Database.txt", "r");
-    if (file == NULL) {
-        printf("File not found!\n");
-        return 1;
-    }
     bool changeData = false;
     NameAndPhoneNumber *database[100];
     int numberOfRecordsInTheDatabase = 0;
-    readFromFile(file, database, &numberOfRecordsInTheDatabase);
-    fclose(file);
+    readFromFile(database, &numberOfRecordsInTheDatabase);
     int operationNumber = 9;
     printInstruction();
     while (operationNumber != 0) {
