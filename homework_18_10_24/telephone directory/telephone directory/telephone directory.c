@@ -8,8 +8,8 @@ typedef struct {
     char phone[20];
 } NameAndPhoneNumber;
 
-int readFromFile(NameAndPhoneNumber **data, int *numberOfLines) {
-    FILE* file = fopen("Database.txt", "r");
+int readFromFile(char *filePath, NameAndPhoneNumber **data, int *numberOfLines) {
+    FILE* file = fopen(filePath, "r");
     if (file == NULL) {
         printf("File not found!\n");
         return 1;
@@ -53,12 +53,12 @@ int readFromFile(NameAndPhoneNumber **data, int *numberOfLines) {
     *numberOfLines = linesRead;
     return 0;
 }
-int writeToFile(NameAndPhoneNumber **data, int numberOfLines, bool *changeData) {
+int writeToFile(char *filePath, NameAndPhoneNumber **data, int numberOfLines, bool *changeData) {
     if (!*changeData) {
         printf("First you need to add data\n");
         return 0;
     }
-    FILE* file = fopen("Database.txt", "w");
+    FILE* file = fopen(filePath, "w");
     if (file == NULL) {
         printf("File not found!\n");
         return 1;
@@ -128,11 +128,16 @@ void findNameByPhone(NameAndPhoneNumber **data, int numberOfLines) {
 
 }
 
+bool testReadFromFile() {
+    
+}
+
 int main(void) {
+    char* filePath = "Database.txt";
     bool changeData = false;
     NameAndPhoneNumber *database[100];
     int numberOfRecordsInTheDatabase = 0;
-    readFromFile(database, &numberOfRecordsInTheDatabase);
+    readFromFile(filePath, database, &numberOfRecordsInTheDatabase);
     int operationNumber = 9;
     printInstruction();
     while (operationNumber != 0) {
@@ -178,7 +183,7 @@ int main(void) {
             findNameByPhone(database, numberOfRecordsInTheDatabase);
         }
         else if (operationNumber == 5) {
-            writeToFile(database, numberOfRecordsInTheDatabase, &changeData);
+            writeToFile(filePath, database, numberOfRecordsInTheDatabase, &changeData);
         }
     }
 }
