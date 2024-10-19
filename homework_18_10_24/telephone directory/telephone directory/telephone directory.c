@@ -47,7 +47,6 @@ int readFromFile(char *filePath, NameAndPhoneNumber **data, int *numberOfLines) 
             free(buffer);
             break;
         }
-        free(buffer);
     }
     fclose(file);
     *numberOfLines = linesRead;
@@ -55,8 +54,7 @@ int readFromFile(char *filePath, NameAndPhoneNumber **data, int *numberOfLines) 
 }
 int writeToFile(char *filePath, NameAndPhoneNumber **data, int numberOfLines, bool *changeData) {
     if (!*changeData) {
-        printf("First you need to add data\n");
-        return 0;
+        return 4;
     }
     FILE* file = fopen(filePath, "w");
     if (file == NULL) {
@@ -68,10 +66,9 @@ int writeToFile(char *filePath, NameAndPhoneNumber **data, int numberOfLines, bo
     }
     fclose(file);
     *changeData = false;
-    printf("Data saved\n");
     return 0;
 }
-void readDatabase(NameAndPhoneNumber **data, int numberOfLines) {
+void printDatabase(NameAndPhoneNumber **data, int numberOfLines) {
     printf("----------\n");
     for (int i = 0; i < numberOfLines; i++) {
         printf("%d: %s %s\n", i + 1, data[i]->name, data[i]->phone);
@@ -89,50 +86,125 @@ void printInstruction() {
     printf("4 - find name by phone\n");
     printf("5 - save current data to file\n----------\n");
 }
-void findPhoneByName(NameAndPhoneNumber **data, int numberOfLines) {
-    printf("----------\n");
-    bool found = false;
-    char name[80];
-    printf("Enter name: ");
-    scanf_s("%s", &name, 80);
-    printf("Found phone numbers: \n");
+char* findPhoneByName(NameAndPhoneNumber **data, int numberOfLines, char name[]) {
     for (int i = 0; i < numberOfLines; ++i) {
         if (!strcmp(name, data[i]->name)) {
-            printf("%s\n", data[i]->phone);
-            found = true;
+            return data[i]->phone;
         }
     }
-    if (!found) {
-        printf("Nothing found\n");
-    }
-    printf("----------\n");
-
+    return "Nothing found";
 }
-void findNameByPhone(NameAndPhoneNumber **data, int numberOfLines) {
-    printf("----------\n");
-    bool found = false;
-    char phone[80];
-    printf("Enter phone: ");
-    scanf_s("%s", &phone, 80);
-    printf("Found name: \n");
+char* findNameByPhone(NameAndPhoneNumber **data, int numberOfLines, char phone[]) {
     for (int i = 0; i < numberOfLines; ++i) {
         if (!strcmp(phone, data[i]->phone)) {
-            printf("%s\n", data[i]->name);
-            found = true;
+            return data[i]->name;
         }
     }
-    if (!found) {
-        printf("Nothing found\n");
-    }
-    printf("----------\n");
-
+    return "Nothing found";
 }
 
-bool testReadFromFile() {
-    
+int fillValuesIntoTheTestDatabase(NameAndPhoneNumber** data) {
+    char* name[5] = { "testName1", "testName2", "testName3", "testName4" , "testName5" };
+    char* phones[5] = {"123132123", "456456123", "7891234", "123456742" , "123412344" };
+    for (int i = 0; i < 5; ++i) {
+        NameAndPhoneNumber* element = malloc(sizeof(NameAndPhoneNumber));
+        if (element == NULL) {
+            printf("Memory allocation failed!\n");
+            return 2;
+        }
+        strcpy_s(element->name, 80, name[i]);
+        strcpy_s(element->phone, 20, phones[i]);
+
+        element->name[9] = '\0';
+        element->phone[9] = '\0';
+
+        data[i] = element;
+    }
+}
+
+bool testReadFromFile(NameAndPhoneNumber **data, int *numberOfRecordsInTheDatabase){
+    NameAndPhoneNumber* testDatabase[5];
+    fillValuesIntoTheTestDatabase(testDatabase);
+    readFromFile("reference file for reading.txt", data, numberOfRecordsInTheDatabase);
+    for (int i = 0; i < 5; i++) {
+        if (data[i] == NULL || testDatabase == NULL) {
+            return false;
+        }
+        if (strcmp(data[i]->name, testDatabase[i]->name)
+            || strcmp(data[i]->phone, testDatabase[i]->phone)) {
+            printf("%s\n", testDatabase[i]->phone);
+            return false;
+        }
+        free(testDatabase[i]);
+    }
+    return true;
+}
+bool testWriteToFile(NameAndPhoneNumber **data, int numberOfRecordsInTheDatabase) {
+    bool changeData = true;
+    writeToFile("test file for writing.txt", data, numberOfRecordsInTheDatabase, &changeData);
+    FILE* referenceFile = fopen("reference file for reading.txt", "r");
+    FILE* testFile = fopen("test file for writing.txt", "r");
+    int linesRead = 0;
+    while (linesRead < 100) {
+        char* buffer1 = malloc(sizeof(char) * 100);
+        char* buffer2 = malloc(sizeof(char) * 100);
+
+        if (buffer1 == NULL || buffer2 == NULL) {
+            printf("Memory allocation failed!\n");
+            return 2;
+        }
+
+        if (fgets(buffer1, 100, referenceFile) != NULL && fgets(buffer2, 100, testFile) != NULL) {
+            buffer1[strcspn(buffer1, "\n")] = 0;
+            buffer2[strcspn(buffer2, "\n")] = 0;
+            if (strcmp(buffer1, buffer2)) {
+                free(buffer1);
+                free(buffer2);
+                return false;
+            }
+            free(buffer1);
+            free(buffer2);
+        }
+        else {
+            free(buffer1);
+            free(buffer2);
+            break;
+        }
+    }
+    fclose(referenceFile);
+    fclose(testFile);
+    return true;
+}
+bool testFindPhoneByName() {
+    NameAndPhoneNumber* testDatabase[5];
+    fillValuesIntoTheTestDatabase(testDatabase);
+    char* name = "testName3";
+    if (!strcmp(findPhoneByName(testDatabase, 5, name), "7891234")) {
+        return true;
+    }
+    return false;
+}
+bool testFindNameByPhone() {
+    NameAndPhoneNumber* testDatabase[5];
+    fillValuesIntoTheTestDatabase(testDatabase);
+    char* phone = "7891234";
+    if (!strcmp(findNameByPhone(testDatabase, 5, phone), "testName3")) {
+        return true;
+    }
+    return false;
+}
+bool testPtogram() {
+    NameAndPhoneNumber* database[5] = { NULL };
+    int numberOfRecordsInTheDatabase = 0;
+    return testReadFromFile(database, &numberOfRecordsInTheDatabase) && testWriteToFile(database, numberOfRecordsInTheDatabase)
+        && testFindPhoneByName() && testFindNameByPhone();
 }
 
 int main(void) {
+    if (!testPtogram()) {
+        printf("Test failed");
+        return -1;
+    }
     char* filePath = "Database.txt";
     bool changeData = false;
     NameAndPhoneNumber *database[100];
@@ -142,6 +214,7 @@ int main(void) {
     printInstruction();
     while (operationNumber != 0) {
         printf("Enter operation number: ");
+
         scanf_s("%d", &operationNumber);
         getchar();
         if (operationNumber == 0) {
@@ -174,16 +247,33 @@ int main(void) {
 
         }
         else if (operationNumber == 2) {
-            readDatabase(database, numberOfRecordsInTheDatabase);
+            printDatabase(database, numberOfRecordsInTheDatabase);
         }
         else if (operationNumber == 3) {
-            findPhoneByName(database, numberOfRecordsInTheDatabase);
+            char name[80];
+            printf("----------\n");
+            printf("Enter name: ");
+            scanf_s("%s", &name, 80);
+            printf("Found phone number: \n");
+            printf("%s\n", findPhoneByName(database, numberOfRecordsInTheDatabase, name));
+            printf("----------\n");
         }
         else if (operationNumber == 4) {
-            findNameByPhone(database, numberOfRecordsInTheDatabase);
+            char phone[20];
+            printf("----------\n");
+            printf("Enter name: ");
+            scanf_s("%s", &phone, 20);
+            printf("Found phone number: \n");
+            printf("%s\n", findNameByPhone(database, numberOfRecordsInTheDatabase, phone));
+            printf("----------\n");
         }
         else if (operationNumber == 5) {
-            writeToFile(filePath, database, numberOfRecordsInTheDatabase, &changeData);
+            if (!writeToFile(filePath, database, numberOfRecordsInTheDatabase, &changeData)) {
+                printf("Data saved\n");
+            }
+            else {
+                printf("First you need to add data\n");
+            }
         }
     }
 }
