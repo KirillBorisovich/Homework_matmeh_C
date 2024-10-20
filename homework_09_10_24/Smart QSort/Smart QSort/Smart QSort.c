@@ -41,39 +41,53 @@ void insertSort(int array[], int first, int last) {
 		array[location + 1] = newElement;
 	}
 }
+
+void qSort(int array[], int first, int last) {
+	if (first < last) {
+		int supportingElement = array[first];
+		int left = first;
+		int right = last;
+		while (left <= right) {
+			while ((array[left] < supportingElement) && (left <= right)) {
+				++left;
+			}
+			while ((supportingElement < array[right]) && (left <= right)) {
+				--right;
+			}
+			if (left <= right) {
+				swap(&array[left], &array[right]);
+				++left;
+				--right;
+			}
+		}
+		qSort(array, first, right);
+		qSort(array, left, last);
+	}
+}
+
 void smartQSort(int array[], int first, int last) {
 	if (last - first + 1 < 10) {
 		insertSort(array, first, last);
 	}
 	else {
-		if (first < last) {
-			int supportingElement = array[first];
-			int left = first;
-			int right = last;
-			while (left <= right) {
-				while ((array[left] < supportingElement) && (left <= right)) {
-					++left;
-				}
-				while ((supportingElement < array[right]) && (left <= right)) {
-					--right;
-				}
-				if (left <= right) {
-					swap(&array[left], &array[right]);
-					++left;
-					--right;
-				}
-			}
-			smartQSort(array, first, right);
-			smartQSort(array, left, last);
-		}
+		qSort(array, first, last);
 	}
 }
 
+bool testInsertSort() {
+	int array[] = { 3, 2, 3, 1, 8, 5, 9, 0, 4 };
+	int sortedArray[] = { 0, 1, 2, 3, 3, 4, 5, 8, 9 };
+	insertSort(array, 0, 8);
+	return arrayComparison(array, sortedArray, 9);
+}
 bool testSmartQSort() {
 	int array[] = { 3, 2, 3, 1, 8, 5, 9, 0, 4 };
 	int sortedArray[] = { 0, 1, 2, 3, 3, 4, 5, 8, 9 };
 	smartQSort(array, 0, 8);
 	return arrayComparison(array, sortedArray, 9);
+}
+bool testProgram() {
+	return testInsertSort() && testSmartQSort();
 }
 
 int main(void) {
