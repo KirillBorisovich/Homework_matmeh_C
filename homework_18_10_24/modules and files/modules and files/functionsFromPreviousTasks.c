@@ -19,11 +19,3 @@ void fillArray(int array[], int lengh) {
 		array[i] = rand();
 	}
 }
-bool arrayComparison(int array1[], int array2[], int lenghs) {
-	for (int i = 0; i < lenghs; ++i) {
-		if (array1[i] != array2[i]) {
-			return false;
-		}
-	}
-	return true;
-}

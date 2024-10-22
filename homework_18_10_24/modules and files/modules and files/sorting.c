@@ -1,47 +1,31 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "sorting.h"
 
-void insertSort(int array[], int first, int last) {
-	int newElement = 0, location = 0;
-	for (int i = first; i <= last; ++i) {
-		newElement = array[i];
-		location = i - 1;
-		while (location >= 0 && array[location] > newElement) {
-			array[location + 1] = array[location];
-			--location;
+int theMostCommonElement(int array[], int lengh) {
+	int min = array[0], max = array[0];
+	for (int i = 0; i < lengh; ++i) {
+		if (min > array[i]) {
+			min = array[i];
 		}
-		array[location + 1] = newElement;
-	}
-}
-
-void qSort(int array[], int first, int last) {
-	if (first < last) {
-		int supportingElement = array[first];
-		int left = first;
-		int right = last;
-		while (left <= right) {
-			while ((array[left] < supportingElement) && (left <= right)) {
-				++left;
-			}
-			while ((supportingElement < array[right]) && (left <= right)) {
-				--right;
-			}
-			if (left <= right) {
-				swap(&array[left], &array[right]);
-				++left;
-				--right;
-			}
+		if (max < array[i]) {
+			max = array[i];
 		}
-		qSort(array, first, right);
-		qSort(array, left, last);
 	}
-}
-
-void smartQSort(int array[], int first, int last) {
-	if (last - first + 1 < 10) {
-		insertSort(array, first, last);
+	int* auxiliaryArray = (int*)calloc(max - min + 1, sizeof(int));
+	if (auxiliaryArray == NULL) {
+		return -1;
 	}
-	else {
-		qSort(array, first, last);
+	for (int i = 0; i < lengh; ++i) {
+		++auxiliaryArray[array[i] - min];
 	}
+	int counterMax = 0, frequentEment = 0;
+	for (int i = 0; i <= max - min + 1; ++i) {
+		if (counterMax < auxiliaryArray[i]) {
+			frequentEment = i + min;
+			counterMax = auxiliaryArray[i];
+		}
+	}
+	free(auxiliaryArray);
+	return frequentEment;
 }

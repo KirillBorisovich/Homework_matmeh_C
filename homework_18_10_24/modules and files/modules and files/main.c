@@ -5,16 +5,13 @@
 #include "tests.h"
 
 int main(void) {
-	if (!testProgram()) {
-		printf("\nTest failed");
+	if (!testTheMostCommonElement()) {
+		printf("Test failed");
 		return -1;
 	}
-	int array[15] = { 0 };
-	int lengh = 15;
+	int array[16] = { 0 };
+	int lengh = 16;
 	readFromFile("numbersToSort.txt", array, lengh);
-	printf("\nSmart QSort\n array: ");
-	printArray(array, lengh);
-	smartQSort(array, 0, lengh - 1);
-	printf("\n sorted array: ");
+	printf("The most common element: %d\nArray: ", theMostCommonElement(array, lengh));
 	printArray(array, lengh);
 }

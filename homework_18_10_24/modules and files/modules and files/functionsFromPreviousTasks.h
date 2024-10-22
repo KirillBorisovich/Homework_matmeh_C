@@ -8,6 +8,3 @@ void printArray(int array[], int lengh);
 
 // Function to fill an array with random numbers
 void fillArray(int array[], int lengh);
-
-// Function to compare two arrays
-bool arrayComparison(int array1[], int array2[], int lenghs);
