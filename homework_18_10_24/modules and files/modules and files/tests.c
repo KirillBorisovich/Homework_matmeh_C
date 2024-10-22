@@ -15,6 +15,13 @@ bool testSmartQSort() {
 	smartQSort(array, 0, 8);
 	return arrayComparison(array, sortedArray, 9);
 }
+bool testReadFromFile() {
+	int array[10] = { 0 };
+	int referenceArray[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	readFromFile("fileForReadingFunctionTest.txt", array, 10);
+	return arrayComparison(array, referenceArray, 10);
+
+}
 bool testProgram() {
-	return testInsertSort() && testSmartQSort();
+	return testInsertSort() && testSmartQSort() && testReadFromFile();
 }

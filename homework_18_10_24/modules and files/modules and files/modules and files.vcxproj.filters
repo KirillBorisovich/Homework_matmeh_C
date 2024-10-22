@@ -27,6 +27,9 @@
     <ClCompile Include="functionsFromPreviousTasks.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="readingValuesFromFile.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sorting.h">
@@ -38,5 +41,11 @@
     <ClInclude Include="functionsFromPreviousTasks.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="readingValuesFromFile.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fileForReadingFunctionTest.txt" />
   </ItemGroup>
 </Project>

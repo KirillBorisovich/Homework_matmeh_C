@@ -11,7 +11,7 @@ int main(void) {
 	}
 	int array[15] = { 0 };
 	int lengh = 15;
-	fillArray(array, lengh);
+	readFromFile("numbersToSort.txt", array, lengh);
 	printf("\nSmart QSort\n array: ");
 	printArray(array, lengh);
 	smartQSort(array, 0, lengh - 1);

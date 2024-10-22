@@ -129,13 +129,18 @@
   <ItemGroup>
     <ClCompile Include="functionsFromPreviousTasks.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="readingValuesFromFile.c" />
     <ClCompile Include="sorting.c" />
     <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functionsFromPreviousTasks.h" />
+    <ClInclude Include="readingValuesFromFile.h" />
     <ClInclude Include="sorting.h" />
     <ClInclude Include="tests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fileForReadingFunctionTest.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
