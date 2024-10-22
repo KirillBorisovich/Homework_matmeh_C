@@ -127,7 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="telephone directory.c" />
+    <ClCompile Include="fileOperations.c" />
+    <ClCompile Include="structure.c" />
+    <ClCompile Include="telephoneDirectory.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fileOperations.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
