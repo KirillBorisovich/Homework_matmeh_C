@@ -1,6 +1,6 @@
 ﻿#include <stdio.h>
 #include <stdbool.h>
-#include "functions from previous tasks.h"
+#include "functionsFromPreviousTasks.h"
 #include "sorting.h"
 #include "tests.h"
 
