@@ -5,11 +5,6 @@
 #include "fileOperations.h"
 #include "structure.h"
 
-typedef struct {
-    char name[80];
-    char phone[20];
-} NameAndPhoneNumber;
-
 void printDatabase(NameAndPhoneNumber **data, int numberOfLines) {
     printf("----------\n");
     for (int i = 0; i < numberOfLines; i++) {

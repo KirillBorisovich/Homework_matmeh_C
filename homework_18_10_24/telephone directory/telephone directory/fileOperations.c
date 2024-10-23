@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "fileOperations.h"
+#include "structure.h"
 
 int readFromFile(char* filePath, NameAndPhoneNumber** data, int* numberOfLines) {
     FILE* file = fopen(filePath, "r");

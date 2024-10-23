@@ -15,18 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="telephoneDirectory.c">
+    <ClCompile Include="main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="fileOperations.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="structure.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fileOperations.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="structure.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
