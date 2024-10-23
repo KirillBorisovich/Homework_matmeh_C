@@ -276,5 +276,8 @@ int main(void) {
                 printf("First you need to add data\n");
             }
         }
+        else {
+            printf("Unknown operation\n");
+        }
     }
 }
