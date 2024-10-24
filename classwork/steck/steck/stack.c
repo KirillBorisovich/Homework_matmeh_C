@@ -16,11 +16,11 @@ Stack* createStack() {
 }
 
 void push(Stack* stack, int value) {
-    StackElement* element = malloc(sizeof(StackElement));
+    StackElement* element = (StackElement*)calloc(1, sizeof(StackElement));
     if (element == NULL) {
         return -1;
     }
-    element->value = 1;
+    element->value = value;
     element->next = stack->head;
     stack->head = element;
 }
