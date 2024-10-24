@@ -4,7 +4,7 @@
 
 typedef struct StackElement {
     int value;
-    struct Element* next;
+    struct StackElement* next;
 } StackElement;
 
 struct Stack {
@@ -29,4 +29,15 @@ void pop(Stack* stack) {
     Stack* tmp = stack->head;
     stack->head = stack->head->next;
     free(tmp);
+}
+
+void deleteStack(Stack* stack) {
+    while (stack->head->next != NULL) {
+        pop(stack);
+    }
+    free(stack);
+}
+
+int getValue(Stack* stack) {
+    return stack->head->value;
 }
