@@ -17,3 +17,6 @@ int getValue(Stack* stack);
 
 // Delete the entire stack
 void deleteStack(Stack* stack);
+
+// Check for value presence
+bool isEmpty(Stack* stack);

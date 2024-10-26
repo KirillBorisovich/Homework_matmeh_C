@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "stack.h"
 
 typedef struct StackElement {
@@ -26,18 +27,27 @@ void push(Stack* stack, int value) {
 }
 
 void pop(Stack* stack) {
+    if (stack->head == NULL) {
+        return;
+    }
     Stack* tmp = stack->head;
     stack->head = stack->head->next;
     free(tmp);
 }
 
 void deleteStack(Stack* stack) {
-    while (stack->head->next != NULL) {
+    while (stack->head != NULL) {
         pop(stack);
     }
-    free(stack);
 }
 
 int getValue(Stack* stack) {
+    if (stack->head == NULL) {
+        return 1;
+    }
     return stack->head->value;
+}
+
+bool isEmpty(Stack* stack) {
+    return !(stack->head = NULL);
 }
