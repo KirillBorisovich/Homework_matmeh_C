@@ -4,12 +4,7 @@
 #include "stack.h"
 
 bool testCreateStack() {
-    Stack* stack = createStack();
-    if (stack != NULL) {
-        free(stack);
-        return true;
-    }
-    return false;
+    return createStack() != NULL;
 }
 
 bool testPushAndGetValue() {
@@ -35,15 +30,20 @@ bool testPop() {
     return false;
 }
 
-bool testDeleteStack() {
-    Stack* stack = createStack();
-    push(stack, 1);
-    push(stack, 2);
-    push(stack, 3);
-    deleteStack(stack);
-    return stack == NULL;
+bool testIsEmpty() {
+    Stack* stack1 = createStack();
+    push(stack1, 1);
+    Stack* stack2 = createStack();
+    push(stack1, 1);
+    pop(stack2);
+    if (!isEmpty(stack1) && isEmpty(stack2)) {
+        deleteStack(stack1);
+        deleteStack(stack2);
+        return true;
+    }
+    return false;
 }
 
-bool testProgram() {
-    return testCreateStack() && testPushAndGetValue() && testPop() && testDeleteStack();
+bool testStack() {
+    return testCreateStack() && testPushAndGetValue() && testPop() && testIsEmpty();
 }

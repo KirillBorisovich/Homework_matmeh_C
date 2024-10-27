@@ -15,7 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="advancedBracketBalance.cpp">
+=======
+    <ClCompile Include="main.c">
+>>>>>>> stack
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

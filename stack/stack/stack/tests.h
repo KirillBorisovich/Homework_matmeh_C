@@ -1,4 +1,4 @@
 #pragma once
 
-// Check tests of all functions
-bool testProgram();
+// Stack testing
+bool testStack();

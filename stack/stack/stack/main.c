@@ -5,7 +5,7 @@
 #include "tests.h"
 
 int main() {
-    if (!testProgram()) {
+    if (!testStack()) {
         printf("Test failed\n");
         return 123;
     }
