@@ -9,14 +9,33 @@ bool advancedBracketBalance(char* string) {
     Stack* stack = createStack();
     int indexCounter = 0;
     while (string[indexCounter] != '\0') {
-        if (string[indexCounter] == '(') {
+        switch (string[indexCounter]) {
+        case '(':
             push(stack, 1);
-        }
-        else if (string[indexCounter] == '{') {
+            break;
+        case '{':
             push(stack, 2);
-        }
-        else if (string[indexCounter] == '[') {
+            break;
+        case '[':
             push(stack, 3);
+            break;
+        default:
+            break;
         }
+        if ((string[indexCounter] == ')' || string[indexCounter] == '}' || string[indexCounter] == ']')
+            && isEmpty(stack)) {
+            return false;
+        }
+        else if (string[indexCounter] == ')' && getValue(stack) == 1 && !isEmpty(stack)) {
+            pop(stack);
+        }
+        else if (string[indexCounter] == '}' && getValue(stack) == 2 && !isEmpty(stack)) {
+            pop(stack);
+        }
+        else if (string[indexCounter] == ']' && getValue(stack) == 3 && !isEmpty(stack)) {
+            pop(stack);
+        }
+        ++indexCounter;
     }
+    return isEmpty(stack);
 }
