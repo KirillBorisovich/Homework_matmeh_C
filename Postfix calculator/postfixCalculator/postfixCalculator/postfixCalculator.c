@@ -66,7 +66,8 @@ int postfixCalculator(char* string, int* errorCode) {
                 *errorCode = 1;
                 return 0;
             }
-            push(stack, strtol(&string[indexCounter], NULL, 10));
+            char number = string[indexCounter];
+            push(stack, strtol(&number, NULL, 10));
             ++numberOfElementsInTheStack;
         }
         ++indexCounter;
