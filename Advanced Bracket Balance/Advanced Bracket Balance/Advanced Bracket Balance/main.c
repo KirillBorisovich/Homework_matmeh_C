@@ -9,5 +9,4 @@ int main() {
         printf("Test failed");
         return -1;
     }
-    char* string = "((()))";
 }
