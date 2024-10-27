@@ -49,5 +49,5 @@ int getValue(Stack* stack) {
 }
 
 bool isEmpty(Stack* stack) {
-    return !(stack->head = NULL);
+    return stack->head == NULL;
 }
