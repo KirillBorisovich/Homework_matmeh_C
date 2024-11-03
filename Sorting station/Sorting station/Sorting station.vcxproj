@@ -127,7 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sorting station.cpp" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="stack.c" />
+    <ClCompile Include="tests.c" />
+    <ClCompile Include="testsStack.c" />
+    <ClCompile Include="transformTheFormOfExpression.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stack.h" />
+    <ClInclude Include="tests.h" />
+    <ClInclude Include="testsStack.h" />
+    <ClInclude Include="transformTheFormOfExpression.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
