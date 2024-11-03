@@ -19,6 +19,7 @@ int main() {
         break;
     case 2:
         printf("Invalid expression entry\n");
+        free(resultString);
         return 2;
         break;
     default:

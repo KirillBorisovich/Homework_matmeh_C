@@ -6,6 +6,7 @@
 #include "tests.h"
 
 bool testTransformTheFormOfExpression() {
+    bool result = false;
     int errorCode1 = 0;
     int errorCode2 = 0;
     int errorCode3 = 0;
@@ -18,8 +19,13 @@ bool testTransformTheFormOfExpression() {
         (!strcmp(testString2, "2 1 1 + *") && errorCode2 == 0) &&
         (testString3 == NULL && errorCode3 == 2) &&
         (testString4 == NULL && errorCode4 == 2)) {
-
+        result = true;
     }
+    free(testString1);
+    free(testString2);
+    free(testString3);
+    free(testString4);
+    return result;
 }
 
 bool testProgram() {
