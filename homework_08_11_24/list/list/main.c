@@ -4,12 +4,12 @@
 int main() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    add(list, 0, 1, &errorCode);
-    add(list, 1, 2, &errorCode);
-    add(list, 2, 3, &errorCode);
-
-    //removeElement(list, 1);
-    for (int i = 0; i < getSizeList(list); ++i) {
+    Position position = first(list);
+    add(list, position, 1, &errorCode);
+    add(list, position, 2, &errorCode);
+    add(list, position, 3, &errorCode);
+    removeElement(list, getElement(list, 1));
+    for (Position i = first(list); !isLast(list, i); i = next(i)) {
         printf("%d", getValue(list, i));
     }
 }

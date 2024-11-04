@@ -13,18 +13,18 @@ List* createList(int* errorCode);
 
 Position first(List* list);
  
-void add(List* list, int index, int value, int* errorCode);
+int add(List* list, Position position, int value, int* errorCode);
 
-void removeElement(List* list, int index);
+void removeElement(List* list, Position position);
 
-Position getElement(List* list, int index);
+Position getElement(List* list, Position position);
 
-Value getValue(List* list, int index);
+Value getValue(List* list, Position position);
 
 bool isLast(List* list, Position position);
 
 bool isValid(List* list, Position position);
 
-void push(List* list, int value, int* errorCode);
+Position next(Position position);
 
 Value getSizeList(List* list);

@@ -21,6 +21,7 @@ List* createList(int* errorCode) {
         return NULL;
     }
     list->head = head;
+    list->head->next == NULL;
     list->size = 0;
     return list;
 }
@@ -29,15 +30,13 @@ Position first(List* list) {
     return list->head;
 }
 
-void add(List* list, int index, int value, int* errorCode) {
-    Position position = getElement(list, index);
+int add(List* list, Position position, int value, int* errorCode) {
     ListElement* element = malloc(sizeof(ListElement));
     if (element == NULL) {
         *errorCode = 1;
-        return NULL;
+        return 0;
     }
     element->value = value;
-    assert(position != NULL);
     if (position != NULL) {
         element->next = position->next;
         position->next = element;
@@ -45,8 +44,7 @@ void add(List* list, int index, int value, int* errorCode) {
     }
 }
 
-void removeElement(List* list, int index) {
-    Position position = getElement(list, index);
+void removeElement(List* list, Position position) {
     ListElement* tmp = position->next;
     position->next = position->next->next;
     free(tmp);
@@ -60,12 +58,14 @@ Position getElement(List* list, int index) {
         if (indexElement->next != NULL) {
             indexElement = indexElement->next;
         }
+        else {
+            break;
+        }
     }
     return indexElement;
 }
 
-Value getValue(List* list, int index) {
-    Position position = getElement(list, index);
+Value getValue(List* list, Position position) {
     if (position->next != NULL) {
         return position->next->value;
     }
@@ -87,6 +87,6 @@ bool isEmpty(List* list) {
     return list->head->next == NULL;
 }
 
-void push(List* list, int value, int* errorCode) {
-    
+Position next(Position position) {
+    return position->next;
 }
