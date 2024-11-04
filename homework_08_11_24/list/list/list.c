@@ -10,6 +10,7 @@ typedef struct ListElement {
 
 typedef struct List {
     ListElement* head;
+    int size;
 };
 
 List* createList(int* errorCode) {
@@ -20,31 +21,58 @@ List* createList(int* errorCode) {
         return NULL;
     }
     list->head = head;
-    return head;
+    list->size = 0;
+    return list;
 }
 
 Position first(List* list) {
     return list->head;
 }
 
-void add(List* list, Position position, int value, int* errorCode) {
+void add(List* list, int index, int value, int* errorCode) {
+    Position position = getElement(list, index);
     ListElement* element = malloc(sizeof(ListElement));
     if (element == NULL) {
         *errorCode = 1;
         return NULL;
     }
     element->value = value;
-    element->next = position->next;
-    position->next = element;
+    assert(position != NULL);
+    if (position != NULL) {
+        element->next = position->next;
+        position->next = element;
+        ++list->size;
+    }
 }
 
-void remove(List* list, Position position) {
-
+void removeElement(List* list, int index) {
+    Position position = getElement(list, index);
+    ListElement* tmp = position->next;
+    position->next = position->next->next;
+    free(tmp);
+    tmp = NULL;
+    --list->size;
 }
 
-Value getValue(List* list, Position position) {
-    assert(position->next == NULL);
-    return position->next->value;
+Position getElement(List* list, int index) { 
+    ListElement* indexElement = list->head;
+    for (int i = 0; i < index; ++i) {
+        if (indexElement->next != NULL) {
+            indexElement = indexElement->next;
+        }
+    }
+    return indexElement;
+}
+
+Value getValue(List* list, int index) {
+    Position position = getElement(list, index);
+    if (position->next != NULL) {
+        return position->next->value;
+    }
+}
+
+Value getSizeList(List* list) {
+    return list->size;
 }
 
 bool isLast(List* list, Position position) {
@@ -53,4 +81,12 @@ bool isLast(List* list, Position position) {
 
 bool isValid(List* list, Position position) {
     return position != NULL;
+}
+
+bool isEmpty(List* list) {
+    return list->head->next == NULL;
+}
+
+void push(List* list, int value, int* errorCode) {
+    
 }
