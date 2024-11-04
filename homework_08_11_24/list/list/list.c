@@ -44,12 +44,21 @@ int add(List* list, Position position, int value, int* errorCode) {
     }
 }
 
+void addInHead(List* list, int value, int* errorCode) {
+    add(list, first(list), value, &errorCode);
+}
+
 void removeElement(List* list, Position position) {
     ListElement* tmp = position->next;
     position->next = position->next->next;
     free(tmp);
     tmp = NULL;
     --list->size;
+}
+
+void removeInHead(List* list) {
+    ListElement* element = calloc(1, sizeof(ListElement));
+
 }
 
 Position getElement(List* list, int index) { 
@@ -89,4 +98,13 @@ bool isEmpty(List* list) {
 
 Position next(Position position) {
     return position->next;
+}
+
+void deleteList(List* list) {
+    while (list->head->next != NULL) {
+        removeElement(list, first(list));
+    }
+    free(list->head);
+    free(list);
+    list = NULL;
 }

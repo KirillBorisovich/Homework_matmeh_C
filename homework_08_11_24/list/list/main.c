@@ -1,7 +1,13 @@
 ﻿#include <stdio.h>
+#include <stdbool.h>
 #include "list.h"
+#include "tests.h"
 
 int main() {
+    if (!testProgram()) {
+        printf("Test failed");
+        return 0;
+    }
     int errorCode = 0;
     List* list = createList(&errorCode);
     Position position = first(list);
@@ -12,4 +18,5 @@ int main() {
     for (Position i = first(list); !isLast(list, i); i = next(i)) {
         printf("%d", getValue(list, i));
     }
+    deleteList(list);
 }
