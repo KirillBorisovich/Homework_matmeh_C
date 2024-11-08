@@ -19,4 +19,5 @@ int main() {
         printf("%d ", getValue(list, position));
         position = next(position);
     }
+    deleteList(list);
 }

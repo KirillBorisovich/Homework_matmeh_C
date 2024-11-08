@@ -19,9 +19,10 @@ bool testCountingRhyme() {
         position = next(position);
         ++index;
     }
+    deleteList(list);
     return result;
 }
 
 bool testProgram() {
-    return testCountingRhyme();
+    return testList() && testCountingRhyme();
 }

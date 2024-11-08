@@ -109,8 +109,9 @@ Position next(Position position) {
 }
 
 void deleteList(List* list) {
-    while (list->head->next != NULL) {
-        removeElement(list, first(list));
+    Position position = first(list);
+    while (next(position) != first(list)) {
+        removeElement(list, position);
     }
     free(list->head);
     free(list);
