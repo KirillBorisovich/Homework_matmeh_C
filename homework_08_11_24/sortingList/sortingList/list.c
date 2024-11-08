@@ -21,7 +21,7 @@ List* createList(int* errorCode) {
         return NULL;
     }
     list->head = head;
-    list->head->next == NULL;
+    list->head->next = NULL;
     list->size = 0;
     return list;
 }
@@ -46,6 +46,11 @@ int add(List* list, Position position, int value, int* errorCode) {
 
 void addInHead(List* list, int value, int* errorCode) {
     add(list, first(list), value, &errorCode);
+}
+
+void addInTail(List* list, int value, int* errorCode) {
+    Position position = getElement(list, getSizeList(list));
+    add(list, position, value, errorCode);
 }
 
 void removeElement(List* list, Position position) {
