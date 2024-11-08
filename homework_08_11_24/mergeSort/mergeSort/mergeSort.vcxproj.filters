@@ -30,6 +30,9 @@
     <ClCompile Include="readingFromFile.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="mergeSort.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests.h">
@@ -42,6 +45,9 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="readingFromFile.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="mergeSort.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

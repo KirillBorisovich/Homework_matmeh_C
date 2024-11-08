@@ -129,12 +129,14 @@
   <ItemGroup>
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="mergeSort.c" />
     <ClCompile Include="readingFromFile.c" />
     <ClCompile Include="tests.c" />
     <ClCompile Include="testsList.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="list.h" />
+    <ClInclude Include="mergeSort.h" />
     <ClInclude Include="readingFromFile.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="testsList.h" />

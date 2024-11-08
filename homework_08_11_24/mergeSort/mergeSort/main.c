@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include "list.h"
 #include "readingFromFile.h"
+#include "mergeSort.h"
 #include "tests.h"
 
 int main() {
@@ -13,10 +14,14 @@ int main() {
     int errorCode = 0;
     List* list = createList(&errorCode);
     readingFromFile("phoneBook.txt", list, &errorCode);
-    for (Position i = first(list); !isLast(list, i); i = next(i)) {
-        char* string = getValue(list, i, &errorCode);
-        printf("%s\n", string);
-        free(string);
-    }
+    List* sortedList = mergeSorting(list, true, errorCode);
     deleteList(list);
+    for (Position i = firstElement(sortedList); !isLast(sortedList, i); i = next(i)) {
+        char name[80] = { NULL };
+        char phone[20] = { NULL };
+        getValue(sortedList, i, name, phone, &errorCode);
+        printf("%s %s\n", name, phone);
+
+    }
+    deleteList(sortedList);
 }

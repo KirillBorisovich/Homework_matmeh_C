@@ -17,9 +17,10 @@ bool testGetValueAndAddInHead() {
     int errorCode = 0;
     List* list = createList(&errorCode);
     addInHead(list, "kirill", "123", & errorCode);
-    char* testString = getValue(list, first(list), &errorCode);
-    bool result = !strcmp(testString, "kirill 123") ? true : false;
-    free(testString);
+    char name[80] = { NULL };
+    char phone[20] = { NULL };
+    getValue(list, firstElement(list), name, phone, &errorCode);
+    bool result = !strcmp(name, "kirill") && !strcmp(phone, "123") ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -27,16 +28,18 @@ bool testGetValueAndAddInHead() {
 bool testAdd() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    Position position = first(list);
+    Position position = firstElement(list);
     add(list, position, "kirill", "123", & errorCode);
+    position = next(firstElement(list));
     add(list, position, "name", "1234", &errorCode);
-    char* testString1 = getValue(list, first(list), &errorCode);
-    bool result = !strcmp(testString1, "name 1234") ? true : false;
-    removeElement(list, position);
-    char* testString2 = getValue(list, first(list), &errorCode);
-    result = !strcmp(testString2, "kirill 123") ? true : false;
-    free(testString1);
-    free(testString2);
+    char name1[80] = { NULL };
+    char phone1[20] = { NULL };
+    getValue(list, firstElement(list), name1, phone1, &errorCode);
+    bool result = !strcmp(name1, "kirill") && !strcmp(phone1, "123") ? true : false;
+    char name2[80] = { NULL };
+    char phone2[20] = { NULL };
+    getValue(list, next(firstElement(list)), name2, phone2, &errorCode);
+    result = !strcmp(name2, "name") && !strcmp(phone2, "1234") ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -44,14 +47,15 @@ bool testAdd() {
 bool testRemoveElement() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    Position position = first(list);
+    Position position = firstElement(list);
     addInHead(list, "name1", "1234", & errorCode);
     addInHead(list, "name2", "12345", &errorCode);
     addInHead(list, "name3", "123456", &errorCode);
     removeElement(list, position);
-    char* testString = getValue(list, position, &errorCode);
-    bool result = !strcmp(testString, "name2 12345") ? true : false;
-    free(testString);
+    char name[80] = { NULL };
+    char phone[20] = { NULL };
+    getValue(list, firstElement(list), name, phone, &errorCode);
+    bool result = !strcmp(name, "name2") && !strcmp(phone, "12345") ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -62,9 +66,10 @@ bool testGetElement() {
     addInHead(list, "name1", "1234", &errorCode);
     addInHead(list, "name2", "12345", &errorCode);
     addInHead(list, "name3", "123456", &errorCode);
-    char* testString = getValue(list, getElement(list, 1), &errorCode);
-    bool result = !strcmp(testString, "name2 12345") ? true : false;
-    free(testString);
+    char name[80] = { NULL };
+    char phone[20] = { NULL };
+    getValue(list, getElement(list, 1), name, phone, &errorCode);
+    bool result = !strcmp(name, "name2") && !strcmp(phone, "12345") ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }

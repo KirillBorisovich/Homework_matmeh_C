@@ -14,7 +14,7 @@ typedef int Value;
 List* createList(int* errorCode);
 
 // Position of the first element
-Position first(List* list);
+Position firstElement(List* list);
 
 // Add element by position
 int add(List* list, Position position, char* name, char* phone, int* errorCode);
@@ -29,7 +29,7 @@ void removeElement(List* list, Position position);
 Position getElement(List* list, int index);
 
 // Get the value of an element
-char* getValue(List* list, Position position, int* errorCode);
+void getValue(List* list, Position position, char* name, char* phone, int* errorCode);
 
 // Returns true if this is the last element
 bool isLast(List* list, Position position);

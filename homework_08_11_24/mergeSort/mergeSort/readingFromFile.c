@@ -40,7 +40,7 @@ int readingFromFile(char* filePath, List* list, int* errorCode) {
                 phone[j] = buffer[i];
                 ++j;
             }
-            add(list, first(list), name, phone, errorCode);
+            add(list, firstElement(list), name, phone, errorCode);
             free(buffer);
         }
         else {

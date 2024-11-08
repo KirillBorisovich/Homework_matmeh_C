@@ -8,17 +8,19 @@
 
 bool testReadingFromFile() {
     bool result = true;
-    char* referenceValues[] = { "name3 12345", "name2 1234", "name1 123" };
+    char* referenceNames[] = { "name3", "name2", "name1" };
+    char* referencePhones[] = { "12345", "1234", "123" };
     int index = 0;
     int errorCode = 0;
     List* list = createList(&errorCode);
     readingFromFile("testForReadingFromFile.txt", list, &errorCode);
-    for (Position i = first(list); !isLast(list, i); i = next(i)) {
-        char* string = getValue(list, i, &errorCode);
-        if (strcmp(string, referenceValues[index])) {
+    for (Position i = firstElement(list); !isLast(list, i); i = next(i)) {
+        char name[80] = { NULL };
+        char phone[20] = { NULL };
+        getValue(list, i, name, phone, &errorCode);
+        if (strcmp(name, referenceNames[index]) || strcmp(phone, referencePhones[index])) {
             result = false;
         }
-        free(string);
         ++index;
     }
     deleteList(list);

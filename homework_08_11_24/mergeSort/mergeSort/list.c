@@ -28,7 +28,7 @@ List* createList(int* errorCode) {
     return list;
 }
 
-Position first(List* list) {
+Position firstElement(List* list) {
     return list->head;
 }
 
@@ -48,7 +48,7 @@ int add(List* list, Position position, char* name, char* phone, int* errorCode) 
 }
 
 void addInHead(List* list, char* name, char* phone, int* errorCode) {
-    add(list, first(list), name, phone, errorCode);
+    add(list, firstElement(list), name, phone, errorCode);
 }
 
 void removeElement(List* list, Position position) {
@@ -74,22 +74,14 @@ Position getElement(List* list, int index) {
     return indexElement;
 }
 
-char* getValue(List* list, Position position, int* errorCode) {
+void getValue(List* list, Position position, char* name, char* phone, int* errorCode) {
     char* nameAndPhone = (char*)calloc(101, sizeof(char));
     if (nameAndPhone == NULL) {
         *errorCode = 1;
         return NULL;
     }
-    int nameLen = strlen(position->next->name);
-    int phoneLen = strlen(position->next->phone);
-    for (int i = 0; i < nameLen; ++i) {
-        nameAndPhone[i] = position->next->name[i];
-    }
-    nameAndPhone[nameLen] = ' ';
-    for (int i = 0; i < phoneLen; ++i) {
-        nameAndPhone[nameLen + 1 + i] = position->next->phone[i];
-    }
-    return nameAndPhone;
+    strcpy_s(name, 80, position->next->name);
+    strcpy_s(phone, 20, position->next->phone);
 }
 
 Value getSizeList(List* list) {
@@ -115,9 +107,10 @@ Position next(Position position) {
 void deleteList(List* list) {
 
     while (list->head->next != NULL) {
-        removeElement(list, first(list));
+        removeElement(list, firstElement(list));
     }
     free(list->head);
     free(list);
     list = NULL;
 }
+
