@@ -51,6 +51,11 @@ void addInHead(List* list, char* name, char* phone, int* errorCode) {
     add(list, firstElement(list), name, phone, errorCode);
 }
 
+void addInTail(List* list, char* name, char* phone, int* errorCode) {
+    Position position = getElement(list, getSizeList(list));
+    add(list, position, name, phone, errorCode);
+}
+
 void removeElement(List* list, Position position) {
     if (position != NULL && position->next != NULL) {
         ListElement* tmp = position->next;
