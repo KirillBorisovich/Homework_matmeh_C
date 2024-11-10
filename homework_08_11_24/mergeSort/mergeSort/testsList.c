@@ -44,6 +44,23 @@ bool testAdd() {
     return result && errorCode == 0;
 }
 
+bool testAddInTail() {
+    int errorCode = 0;
+    List* list = createList(&errorCode);
+    Position position = firstElement(list);
+    addInTail(list, "name1", "123", &errorCode);
+    position = next(firstElement(list));
+    addInTail(list, "name2", "1234", &errorCode);
+    char name1[80] = { NULL };
+    char phone1[20] = { NULL };
+    getValue(list, firstElement(list), name1, phone1, &errorCode);
+    bool result = !strcmp(name1, "name1") && !strcmp(phone1, "123") ? true : false;
+    getValue(list, next(firstElement(list)), name1, phone1, &errorCode);
+    result = !strcmp(name1, "name2") && !strcmp(phone1, "1234") ? true : false;
+    deleteList(list);
+    return result && errorCode == 0;
+}
+
 bool testRemoveElement() {
     int errorCode = 0;
     List* list = createList(&errorCode);
@@ -76,7 +93,7 @@ bool testGetElement() {
 
 bool testList() {
     return testCreateList() && testGetValueAndAddInHead() &&
-        testAdd() && testRemoveElement() && testGetElement();
+        testAdd() && testAddInTail() && testRemoveElement() && testGetElement();
 }
 
 
