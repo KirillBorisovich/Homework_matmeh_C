@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "testsList.h"
 #include "list.h"
 
 bool testCreateList() {
@@ -25,6 +26,21 @@ bool testAddInHead() {
     List* list = createList(&errorCode);
     addInHead(list, 1, &errorCode);
     bool result = getValue(list, first(list)) == 1 ? true : false;
+    deleteList(list);
+    return result && errorCode == 0;
+}
+
+bool testAddInTail() {
+    int errorCode = 0;
+    List* list = createList(&errorCode);
+    addInTail(list, 1, &errorCode);
+    addInTail(list, 2, &errorCode);
+    addInTail(list, 3, &errorCode);
+    bool result = getValue(list, first(list)) == 1 ? true : false;
+    removeElement(list, first(list));
+    result = getValue(list, first(list)) == 2 ? true : false;
+    removeElement(list, first(list));
+    result = getValue(list, first(list)) == 3 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -66,20 +82,7 @@ bool testGetElement() {
     return result && errorCode == 0;
 }
 
-bool testAddInTailaddInTail() {
-    int errorCode = 0;
-    List* list = createList(&errorCode);
-    Position position = first(list);
-    addInTail(list, 1, &errorCode);
-    addInTail(list, 2, &errorCode);
-    bool result = getValue(list, first(list)) == 1 ? true : false;
-    removeElement(list, position);
-    result = getValue(list, first(list)) == 2 ? true : false;
-    deleteList(list);
-    return result && errorCode == 0;
-}
-
 bool testList() {
-    return testCreateList() && testGetValue() && testAddInHead() &&
-        testAdd() && testRemoveElement() && testGetElement() && testAddInTailaddInTail();
+    return testCreateList() && testGetValue() && testAddInHead() && testAddInTail() &&
+        testAdd() && testRemoveElement() && testGetElement();
 }

@@ -23,9 +23,9 @@ List* createList(int* errorCode) {
         return NULL;
     }
     list->head = head;
-    list->head->next == NULL;
+    list->head->next = NULL;
     list->tail = head;
-    list->tail->next == NULL;
+    list->tail->next = NULL;
     list->size = 0;
     return list;
 }
@@ -53,12 +53,12 @@ int add(List* list, Position position, int value, int* errorCode) {
 }
 
 void addInHead(List* list, int value, int* errorCode) {
-    add(list, first(list), value, &errorCode);
+    add(list, first(list), value, errorCode);
 }
 
 void addInTail(List* list, int value, int* errorCode) {
     Position position = list->tail;
-    add(list, position, value, &errorCode);
+    add(list, position, value, errorCode);
     list->tail = next(position);
 }
 
