@@ -10,18 +10,22 @@ typedef struct ListElement {
 
 typedef struct List {
     ListElement* head;
+    ListElement* tail;
     int size;
 };
 
 List* createList(int* errorCode) {
     List* list = malloc(sizeof(List));
     ListElement* head = calloc(1, sizeof(ListElement));
-    if (list == NULL || head == NULL) {
+    ListElement* tail = calloc(1, sizeof(ListElement));
+    if (list == NULL || head == NULL || tail == NULL) {
         *errorCode = 1;
         return NULL;
     }
     list->head = head;
     list->head->next = NULL;
+    list->tail = tail;
+    list->tail->next = NULL;
     list->size = 0;
     return list;
 }
@@ -44,6 +48,8 @@ int add(List* list, Position position, int value, int* errorCode) {
     }
     if (list->size == 1) {
         element->next = list->head;
+        list->head->next = element;
+        list->tail = element;
     }
 }
 
@@ -52,8 +58,9 @@ void addInHead(List* list, int value, int* errorCode) {
 }
 
 void addInTail(List* list, int value, int* errorCode) {
-    Position position = getElement(list, getSizeList(list));
+    Position position = list->tail;
     add(list, position, value, errorCode);
+    list->tail = next(position);
 }
 
 void removeElement(List* list, Position position) {
@@ -62,11 +69,6 @@ void removeElement(List* list, Position position) {
     free(tmp);
     tmp = NULL;
     --list->size;
-}
-
-void removeInHead(List* list) {
-    ListElement* element = calloc(1, sizeof(ListElement));
-
 }
 
 Position getElement(List* list, int index) {
