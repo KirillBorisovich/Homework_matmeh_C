@@ -30,6 +30,21 @@ bool testAddInHead() {
     return result && errorCode == 0;
 }
 
+bool testAddInTail() {
+    int errorCode = 0;
+    List* list = createList(&errorCode);
+    addInTail(list, 1, &errorCode);
+    addInTail(list, 2, &errorCode);
+    addInTail(list, 3, &errorCode);
+    bool result = getValue(list, first(list)) == 1 ? true : false;
+    removeElement(list, first(list));
+    result = getValue(list, first(list)) == 2 ? true : false;
+    removeElement(list, first(list));
+    result = getValue(list, first(list)) == 3 ? true : false;
+    deleteList(list);
+    return result && errorCode == 0;
+}
+
 bool testAdd() {
     int errorCode = 0;
     List* list = createList(&errorCode);
@@ -68,7 +83,7 @@ bool testGetElement() {
 }
 
 bool testProgram() {
-    return testCreateList() && testGetValue() && testAddInHead() &&
+    return testCreateList() && testGetValue() && testAddInHead() && testAddInTail() &&
         testAdd() && testRemoveElement() && testGetElement();
 }
 
