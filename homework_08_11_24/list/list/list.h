@@ -20,6 +20,9 @@ int add(List* list, Position position, int value, int* errorCode);
 // Add element to head
 void addInHead(List* list, int value, int* errorCode);
 
+// Add element to tail
+void addInTail(List* list, int value, int* errorCode);
+
 // Delete element by position
 void removeElement(List* list, Position position);
 
