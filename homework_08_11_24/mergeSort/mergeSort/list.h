@@ -22,6 +22,7 @@ int add(List* list, Position position, char* name, char* phone, int* errorCode);
 // Add element to head
 void addInHead(List* list, char* name, char* phone, int* errorCode);
 
+// Add element to tail
 void addInTail(List* list, char* name, char* phone, int* errorCode);
 
 // Delete element by position

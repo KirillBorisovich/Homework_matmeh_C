@@ -22,11 +22,22 @@ int main() {
 
     List* sortedList = operationNumber == 0 ? mergeSorting(list, true, &errorCode) : mergeSorting(list, false, &errorCode);
     deleteList(list);
-    for (Position i = firstElement(sortedList); !isLast(sortedList, i); i = next(i)) {
-        char name[80] = { '\0' };
-        char phone[20] = { '\0' };
-        getValue(sortedList, i, name, phone, &errorCode);
-        printf("%s %s\n", name, phone);
+    if (errorCode == 0) {
+        for (Position i = firstElement(sortedList); !isLast(sortedList, i); i = next(i)) {
+            char name[80] = { '\0' };
+            char phone[20] = { '\0' };
+            getValue(sortedList, i, name, phone, &errorCode);
+            printf("%s %s\n", name, phone);
+        }
     }
+    else if (errorCode == 1) {
+        printf("Memory allocation error");
+        return 1;
+    }
+    else if (errorCode == 2) {
+        printf("Error opening file");
+        return 2;
+    }
+    
     deleteList(sortedList);
 }

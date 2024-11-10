@@ -23,7 +23,7 @@ int readingFromFile(char* filePath, List* list, int* errorCode) {
             ListElement* element = malloc(sizeof(Position));
             if (element == NULL) {
                 printf("Memory allocation failed!\n");
-                return 2;
+                return 1;
             }
             size_t spaceIndex = strcspn(buffer, " ");
             char* name = (char*)calloc(80, sizeof(char));
@@ -36,7 +36,7 @@ int readingFromFile(char* filePath, List* list, int* errorCode) {
                 name[i] = buffer[i];
             }
             int j = 0;
-            for (int i = spaceIndex + 1; i < strlen(buffer); ++i) {
+            for (size_t i = spaceIndex + 1; i < strlen(buffer); ++i) {
                 phone[j] = buffer[i];
                 ++j;
             }
