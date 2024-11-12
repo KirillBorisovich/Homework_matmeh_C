@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include "searchTree.h"
 #include "testsSearchTree.h"
 
@@ -23,24 +24,23 @@ int main() {
     while (operationNumber != 0) {
         printf("Enter operation number: ");
         scanf_s("%d", &operationNumber);
-        getchar();
         if (operationNumber == 0) {
             deleteTree(tree);
             return 0;
         }
         else if (operationNumber == 1) {
             int key = 0;
-            char value[100] = { '\0' };
+            char* value = malloc(100 * sizeof(char));
             printf("Enter key: ");
             scanf_s("%d", &key);
             getchar();
             printf("Enter value: ");
-            fgets(&value, 99, stdin);
+            fgets(value, 99, stdin);
             value[strcspn(value, "\n")] = 0;
             NodeValue nodeValue = { key, value };
             addElementToTree(tree, nodeValue, &errorCode);
             if (errorCode == 1) {
-                printf("Memory allocation error");
+                printf("Memory allocation error\n");
                 return 1;
             }
         }
@@ -48,7 +48,13 @@ int main() {
             int key = 0;
             printf("Enter key: ");
             scanf_s("%d", &key);
-            printf("%s", getValue(findElementByKey(tree, key)).value);
+            Node* elementByKey = findElementByKey(tree, key);
+            if (elementByKey != NULL) {
+                printf("%s\n", getValue(elementByKey).value);
+            }
+            else {
+                printf("There is no such element in the dictionary\n");
+            }
 
         }
         else if (operationNumber == 3) {
@@ -59,7 +65,7 @@ int main() {
                 printf("The meaning is in the dictionary\n");
             }
             else {
-                printf("The meaning is not in the dictionary");
+                printf("The meaning is not in the dictionary\n");
             }
         }
         else if (operationNumber == 4) {

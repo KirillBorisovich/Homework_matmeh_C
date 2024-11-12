@@ -104,7 +104,6 @@ void deleteElementByKey(Node* node, int key) {
             else {
                 element->parent->rightChild = NULL;
             }
-            free(element);
         }
         else if (element->leftChild != NULL && element->rightChild == NULL) {
             if (element->parent->leftChild == element) {
@@ -113,7 +112,6 @@ void deleteElementByKey(Node* node, int key) {
             else {
                 element->parent->rightChild = element->leftChild;
             }
-            free(element);
         }
         else if (element->leftChild == NULL && element->rightChild != NULL) {
             if (element->parent->leftChild == element) {
@@ -122,15 +120,16 @@ void deleteElementByKey(Node* node, int key) {
             else {
                 element->parent->rightChild = element->rightChild;
             }
-            free(element);
         }
         else if (element->leftChild != NULL && element->rightChild != NULL) {
             Node* elementReplacement = getTheMinimumElementOfTheRightNode(element);
             if (elementReplacement->parent->leftChild == elementReplacement) {
-                elementReplacement->parent->leftChild = NULL;
+                elementReplacement->parent->leftChild = elementReplacement->rightChild != NULL ?
+                    elementReplacement->rightChild : NULL;
             }
             else {
-                elementReplacement->parent->rightChild = NULL;
+                elementReplacement->parent->rightChild = elementReplacement->rightChild != NULL ?
+                    elementReplacement->rightChild : NULL;
             }
             elementReplacement->parent = element->parent;
             if (element->parent->leftChild == element) {
@@ -139,8 +138,12 @@ void deleteElementByKey(Node* node, int key) {
             else {
                 element->parent->rightChild = elementReplacement;
             }
-            free(element);
+            elementReplacement->leftChild = element->leftChild;
+            elementReplacement->rightChild = element->rightChild;
         }
+        char* textValue = element->value.value;
+        free(textValue);
+        free(element);
     }
 }
 
@@ -150,5 +153,7 @@ void deleteTree(Node* node) {
     }
     deleteTree(node->leftChild);
     deleteTree(node->rightChild);
+    char* textValue = node->value.value;
+    free(textValue);
     free(node);
 }

@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include "searchTree.h"
 #include "testsSearchTree.h"
 
@@ -9,8 +11,15 @@ bool testCreateNode(Node* node) {
 
 bool testAddLeftChildAndGetLeftChild() {
     int errorCode = 0;
-    NodeValue value1 = { 1, "qweasd" };
-    NodeValue value2 = { 2, "qweaqw" };
+    char* textValue1 = calloc(20, sizeof(char));
+    char* textValue2 = calloc(20, sizeof(char));
+    if (textValue1 == NULL || textValue2 == NULL) {
+        return false;
+    }
+    strcpy_s(textValue1, 19, "qweasd");
+    strcpy_s(textValue2, 19, "qweaqw");
+    NodeValue value1 = { 1, textValue1 };
+    NodeValue value2 = { 2, textValue2 };
     Node* node = createNode(value1, &errorCode);
     Node* child = createNode(value2, &errorCode);
     addLeftChild(node, child);
@@ -21,8 +30,15 @@ bool testAddLeftChildAndGetLeftChild() {
 
 bool testAddRightChildAndGetRightChild() {
     int errorCode = 0;
-    NodeValue value1 = { 1, "qweasd" };
-    NodeValue value2 = { 2, "qweaqw" };
+    char* textValue1 = calloc(20, sizeof(char));
+    char* textValue2 = calloc(20, sizeof(char));
+    if (textValue1 == NULL || textValue2 == NULL) {
+        return false;
+    }
+    strcpy_s(textValue1, 19, "qweasd");
+    strcpy_s(textValue2, 19, "qweaqw");
+    NodeValue value1 = { 1, textValue1 };
+    NodeValue value2 = { 2, textValue2 };
     Node* node = createNode(value1, &errorCode);
     Node* child = createNode(value2, &errorCode);
     addRightChild(node, child);
@@ -73,18 +89,38 @@ bool testDeleteElementByKey(Node* node) {
 }
 
 bool testTree() {
+    bool result = false;
     int errorCode = 0;
-    NodeValue value1 = { 1, "qweasd1" };
+    char* textValue1 = calloc(20, sizeof(char));
+    char* textValue2 = calloc(20, sizeof(char));
+    char* textValue3 = calloc(20, sizeof(char));
+    char* textValue4 = calloc(20, sizeof(char));
+    if (textValue1 == NULL || textValue2 == NULL ||
+        textValue3 == NULL || textValue4 == NULL) {
+        return false;
+    }
+
+    strcpy_s(textValue1, 19, "qweasd1");
+    strcpy_s(textValue2, 19, "qweasd2");
+    strcpy_s(textValue3, 19, "qweasd3");
+    strcpy_s(textValue4, 19, "qweasd4");
+
+    NodeValue value1 = { 1, textValue1 };
     Node* node = createNode(value1, &errorCode);
-    NodeValue value2 = { 5, "qweasd2" };
-    NodeValue value3 = { 3, "qweasd3" };
-    NodeValue value4 = { 4, "qweasd4" };
+    NodeValue value2 = { 5, textValue2 };
+    NodeValue value3 = { 3, textValue3 };
+    NodeValue value4 = { 4, textValue4 };
     addElementToTree(node, value2, &errorCode);
     addElementToTree(node, value3, &errorCode);
     addElementToTree(node, value4, &errorCode);
-    return testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&
+
+    if (testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&
         testAddRightChildAndGetRightChild() && testGetValue(node) && testAddElementToTree(node, &errorCode) &&
-        testFindElementByKey(node, &errorCode) && 
+        testFindElementByKey(node, &errorCode) &&
         testGetTheMinimumElementOfTheRightNode(node, &errorCode) &&
-        testDeleteElementByKey(node) && errorCode == 0;
+        testDeleteElementByKey(node) && errorCode == 0) {
+        result = true;
+    }
+    deleteTree(node);
+    return result;
 }
