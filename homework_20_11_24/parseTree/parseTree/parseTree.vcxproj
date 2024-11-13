@@ -127,7 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="parseTree.cpp" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="parseTree.c" />
+    <ClCompile Include="testsParseTree.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="parseTree.h" />
+    <ClInclude Include="testsParseTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

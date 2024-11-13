@@ -1,3 +1,27 @@
-#pragma once
+﻿#pragma once
 
+typedef struct Node Node;
 
+// Create a node
+Node* createNode(char* value, int* errorCode);
+
+// Add left child
+void addLeftChild(Node* node, Node* child);
+
+// Add right child
+void addRightChild(Node* node, Node* child);
+
+// Get left child
+Node* getLeftChild(Node* node);
+
+// Get right child
+Node* getRightChild(Node* node);
+
+// Get value from node
+char* getValue(Node* node);
+
+// Add values ​​to node
+void setValue(Node* node, char* value);
+
+// Remove tree
+void deleteTree(Node* node);
