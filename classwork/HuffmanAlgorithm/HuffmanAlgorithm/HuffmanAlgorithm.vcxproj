@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6fa9674a-c92e-483e-81a3-1c08ac142d61}</ProjectGuid>
-    <RootNamespace>binaryTree</RootNamespace>
+    <ProjectGuid>{02b0a7e2-8056-4c98-a869-1d21d3580934}</ProjectGuid>
+    <RootNamespace>HuffmanAlgorithm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="binaryTree.cpp" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="tree.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
