@@ -9,11 +9,13 @@ int main() {
         return 123;
     }
     int errorCode = 0;
+
     char* inputString = calloc(100, sizeof(char));
     if (inputString == NULL) {
         printf("Memory allocation error\n");
         return 1;
     }
+
     FILE* file = fopen("input.txt", "r");
     if (fgets(inputString, 100, file) == NULL) {
         free(inputString);
@@ -21,4 +23,5 @@ int main() {
         return 0;
     }
     
+
 }
