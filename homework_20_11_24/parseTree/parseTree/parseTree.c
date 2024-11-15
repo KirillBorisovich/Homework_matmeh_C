@@ -79,6 +79,9 @@ Node* splitArithmeticExpression(char* string, int* index, int* errorCode) {
         node->rightChild = splitArithmeticExpression(string, index, errorCode);
         return node;
     }
+    else {
+        return NULL;
+    }
 }
 
 void printTree(Node* node) {
@@ -91,7 +94,7 @@ void printTree(Node* node) {
 }
 
 int calculateTheValueOfTheTree(Node* node, int* errorCode) {
-    int value = node->value;
+    const int value = node->value[0];
     if (48 <= value && value <= 57) {
         return value - '0';
     }
@@ -115,5 +118,8 @@ int calculateTheValueOfTheTree(Node* node, int* errorCode) {
             return 0;
         }
         return left / right;
+    }
+    else {
+        return 0;
     }
 }
