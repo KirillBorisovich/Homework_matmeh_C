@@ -21,6 +21,5 @@ void countingRhyme(List* list, int n, int m, int* errorCode) {
             position = next(position);
             removeElement(list, position);
         }
-
    }
 }
