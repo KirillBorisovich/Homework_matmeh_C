@@ -1,5 +1,6 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "parseTree.h"
 #include "testsParseTree.h"
 
@@ -25,5 +26,19 @@ int main() {
     
     int index = 0;
     Node* parseTree = splitArithmeticExpression(inputString, &index, &errorCode);
-
+    int result = calculateTheValueOfTheTree(parseTree, &errorCode);
+    switch (errorCode) {
+    case 0:
+        printf("Parse tree: ");
+        printTree(parseTree);
+        printf("\n");
+        printf("The calculated value of the tree expression: %d\n", result);
+        return 0;
+    case 1:
+        printf("Memory allocation error");
+        return 1;
+    case 2:
+        printf("Division by zero is not possible");
+        return 2;
+    }
 }

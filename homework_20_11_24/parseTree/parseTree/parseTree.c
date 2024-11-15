@@ -49,7 +49,7 @@ void deleteTree(Node* node) {
     }
     deleteTree(node->leftChild);
     deleteTree(node->rightChild);
-    char* value = node->value;
+    const char* value = node->value;
     free(value);
     free(node);
 }
@@ -78,5 +78,42 @@ Node* splitArithmeticExpression(char* string, int* index, int* errorCode) {
         node->leftChild = splitArithmeticExpression(string, index, errorCode);
         node->rightChild = splitArithmeticExpression(string, index, errorCode);
         return node;
+    }
+}
+
+void printTree(Node* node) {
+    if (node == NULL) {
+        return;
+    }
+    printf("%s ", node->value);
+    printTree(node->leftChild);
+    printTree(node->rightChild);
+}
+
+int calculateTheValueOfTheTree(Node* node, int* errorCode) {
+    int value = node->value;
+    if (48 <= value && value <= 57) {
+        return value - '0';
+    }
+    if (!strcmp(node->value, "*")) {
+        return calculateTheValueOfTheTree(node->leftChild, errorCode) * 
+            calculateTheValueOfTheTree(node->leftChild, errorCode);
+    }
+    else if (!strcmp(node->value, "+")) {
+        return calculateTheValueOfTheTree(node->leftChild, errorCode) + 
+            calculateTheValueOfTheTree(node->leftChild, errorCode);
+    }
+    else if (!strcmp(node->value, "-")) {
+        return calculateTheValueOfTheTree(node->leftChild, errorCode) - 
+            calculateTheValueOfTheTree(node->leftChild, errorCode);
+    }
+    else if (!strcmp(node->value, "/")) {
+        int left = calculateTheValueOfTheTree(node->leftChild, errorCode);
+        int right = calculateTheValueOfTheTree(node->leftChild, errorCode);
+        if (right == 0) {
+            *errorCode = 2;
+            return 0;
+        }
+        return left / right;
     }
 }

@@ -28,3 +28,9 @@ void deleteTree(Node* node);
 
 // Fill a parse tree with an arithmetic expression
 Node* splitArithmeticExpression(char* string, int* index, int* errorCode);
+
+// Print tree
+void printTree(Node* node);
+
+// Calculate the value of an expression by traversing a tree
+int calculateTheValueOfTheTree(Node* node, int* errorCode);
