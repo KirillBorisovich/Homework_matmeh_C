@@ -5,19 +5,14 @@
 #include "testsList.h"
 
 bool testCountingRhyme() {
-    bool result = true;
+    bool result = false;
     int errorCode = 0;
     List* list = createList(&errorCode);
-    int testValues[] = { 11, 17 };
-    int index = 0;
-    countingRhyme(list, 20, 3, &errorCode);
+    int testValues = 3;
+    countingRhyme(list, 20, 7, &errorCode);
     Position position = first(list);
-    while (next(position) != first(list)) {
-        if (getValue(list, position) != testValues[index]) {
-            result = false;
-        }
-        position = next(position);
-        ++index;
+    if (getValue(list, first(list)) == 3) {
+        result = true;
     }
     deleteList(list);
     return result;

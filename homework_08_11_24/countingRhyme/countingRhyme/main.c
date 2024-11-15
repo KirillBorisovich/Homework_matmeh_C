@@ -14,16 +14,13 @@ int main() {
     int errorCode = 0;
     List* list = createList(&errorCode);
     countingRhyme(list, n, m, &errorCode);
-    Position position = first(list);
     if (errorCode == 0) {
-        while (next(position) != first(list)) {
-            printf("%d ", getValue(list, position));
-            position = next(position);
-        }
+        printf("The number will survive: %d\n", getValue(list, first(list)));
     }
     else if (errorCode == 1) {
         printf("Memory allocation error");
+        deleteList(list);
+        return 1;
     }
-    
     deleteList(list);
 }

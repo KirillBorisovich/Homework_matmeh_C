@@ -7,13 +7,20 @@ void countingRhyme(List* list, int n, int m, int* errorCode) {
     for (int i = 1; i <= n; ++i) {
         addInTail(list, i, errorCode);
     }
-    while (getSizeList(list) != m - 1) {
+    while (getSizeList(list) != 1) {
         for (int i = 0; i < m - 1; ++i) {
             position = next(position);
+            if (position == first(list)) {
+                position = next(position);
+            }
         }
-        if (next(position) == first(list)) {
+        if (next(position) != first(list)) {
+            removeElement(list, position);
+        }
+        else {
             position = next(position);
+            removeElement(list, position);
         }
-        removeElement(list, position);
-    }
+
+   }
 }
