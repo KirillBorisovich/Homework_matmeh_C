@@ -18,10 +18,13 @@ Node* getLeftChild(Node* node);
 Node* getRightChild(Node* node);
 
 // Get value from node
-char* getValue(Node* node);
+const char* getValue(Node* node);
 
 // Add values ​​to node
 void setValue(Node* node, char* value);
 
 // Remove tree
 void deleteTree(Node* node);
+
+// Fill a parse tree with an arithmetic expression
+Node* splitArithmeticExpression(char* string, int* index, int* errorCode);

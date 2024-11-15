@@ -47,16 +47,23 @@ bool testGetValue(Node* node) {
     return strcmp(getValue, "qweasd1");
 }
 
-bool testAddElementToTree(Node* node, int* errorCode) {
+bool testSplitArithmeticExpression(int* errorCode) {
     bool result = false;
-    Node* child1 = getRightChild(node);
-    Node* child2 = getLeftChild(child1);
-    Node* child3 = getRightChild(child2);
-    
-    if (!strcmp(getValue(node), "qweasd1") && !strcmp(getValue(child1), "qweasd5") &&
-        !strcmp(getValue(child2), "qweasd3") && strcmp(getValue(child3), "qweasd4")) {
+    char* testString = calloc(20, sizeof(char));
+    if (testString == NULL) {
+        *errorCode = 1;
+        return false;
+    }
+    strcpy_s(testString, 20, "( * ( + 1 2 ) 2 )");
+    int index = 0;
+    Node* node = splitArithmeticExpression(testString, &index, errorCode);
+    if (!strcmp(getValue(node), "*") && !strcmp(getValue(getLeftChild(node)), "+") &&
+        !strcmp(getValue(getLeftChild(getLeftChild(node))), "1") &&
+        !strcmp(getValue(getRightChild(getLeftChild(node))), "2") &&
+        !strcmp(getValue(getRightChild(node)), "2")) {
         result = true;
     }
+    deleteTree(node);
     return result;
 }
 
@@ -70,9 +77,10 @@ bool testTree() {
     strcpy_s(textValue1, 19, "qweasd1");
     Node* node = createNode(textValue1, &errorCode);
     if (testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&
-        testAddRightChildAndGetRightChild() && testGetValue(node)) {
+        testAddRightChildAndGetRightChild() && testGetValue(node) && 
+        testSplitArithmeticExpression(&errorCode)) {
         result = true;
     }
     deleteTree(node);
-    return result;
+    return result && errorCode == 0;
 }

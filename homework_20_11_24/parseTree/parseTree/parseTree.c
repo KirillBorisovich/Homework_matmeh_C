@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "parseTree.h"
 
 typedef struct Node {
-    char* value;
-    Node* parent;
+    const char* value;
     Node* leftChild;
     Node* rightChild;
 } Node;
@@ -21,12 +21,10 @@ Node* createNode(char* value, int* errorCode) {
 
 void addLeftChild(Node* node, Node* child) {
     node->leftChild = child;
-    child->parent = node;
 }
 
 void addRightChild(Node* node, Node* child) {
     node->rightChild = child;
-    child->parent = node;
 }
 
 Node* getLeftChild(Node* node) {
@@ -37,7 +35,7 @@ Node* getRightChild(Node* node) {
     return node->rightChild;
 }
 
-char* getValue(Node* node) {
+const char* getValue(Node* node) {
     return node->value;
 }
 
@@ -54,4 +52,31 @@ void deleteTree(Node* node) {
     char* value = node->value;
     free(value);
     free(node);
+}
+
+Node* splitArithmeticExpression(char* string, int* index, int* errorCode) {
+    if (string[*index] == '\0') {
+        return NULL;
+    }
+    while (string[*index] == '(' || string[*index] == ')' || string[*index] == ' ') {
+        ++*index;
+    }
+    char* value = calloc(2, sizeof(char));
+    if (value == NULL) {
+        *errorCode = 1;
+        return NULL;
+    }
+    value[0] = string[*index];
+    if (48 <= string[*index] && string[*index] <= 57) {
+        ++*index;
+        return createNode(value, errorCode);
+    }
+    else if (string[*index] == '*' || string[*index] == '-' ||
+        string[*index] == '+' || string[*index] == '/') {
+        Node* node = createNode(value, errorCode);
+        ++*index;
+        node->leftChild = splitArithmeticExpression(string, index, errorCode);
+        node->rightChild = splitArithmeticExpression(string, index, errorCode);
+        return node;
+    }
 }

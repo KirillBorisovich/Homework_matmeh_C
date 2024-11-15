@@ -23,5 +23,7 @@ int main() {
         return 0;
     }
     
+    int index = 0;
+    Node* parseTree = splitArithmeticExpression(inputString, &index, &errorCode);
 
 }
