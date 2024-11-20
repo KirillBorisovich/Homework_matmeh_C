@@ -52,9 +52,9 @@ bool testSplitArithmeticExpression(char* string, int* errorCode) {
     int index = 0;
     Node* node = splitArithmeticExpression(string, &index, errorCode);
     if (!strcmp(getValue(node), "*") && !strcmp(getValue(getLeftChild(node)), "+") &&
-        !strcmp(getValue(getLeftChild(getLeftChild(node))), "1") &&
-        !strcmp(getValue(getRightChild(getLeftChild(node))), "2") &&
-        !strcmp(getValue(getRightChild(node)), "2")) {
+        !strcmp(getValue(getLeftChild(getLeftChild(node))), "13") &&
+        !strcmp(getValue(getRightChild(getLeftChild(node))), "1") &&
+        !strcmp(getValue(getRightChild(node)), "10")) {
         result = true;
     }
     deleteTree(node);
@@ -65,7 +65,7 @@ bool testCalculateTheValueOfTheTree(char* string, int* errorCode) {
     bool result = false;
     int index = 0;
     Node* node = splitArithmeticExpression(string, &index, errorCode);
-    if (calculateTheValueOfTheTree(node, errorCode) == 4) {
+    if (calculateTheValueOfTheTree(node, errorCode) == 140) {
         result = true;
     }
     deleteTree(node);
@@ -80,7 +80,7 @@ bool testTree() {
     if (textValue1 == NULL || testString == NULL) {
         return false;
     }
-    strcpy_s(testString, 20, "( * ( + 1 2 ) 2 )");
+    strcpy_s(testString, 20, "( * ( + 13 1 ) 10 )");
     strcpy_s(textValue1, 19, "qweasd1");
     Node* node = createNode(textValue1, &errorCode);
     if (testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&

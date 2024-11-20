@@ -61,18 +61,24 @@ Node* splitArithmeticExpression(char* string, int* index, int* errorCode) {
     while (string[*index] == '(' || string[*index] == ')' || string[*index] == ' ') {
         ++*index;
     }
-    char* value = calloc(2, sizeof(char));
+    char* value = calloc(30, sizeof(char));
     if (value == NULL) {
         *errorCode = 1;
         return NULL;
     }
-    value[0] = string[*index];
-    if (48 <= string[*index] && string[*index] <= 57) {
+
+    int i = 0;
+    while (48 <= string[*index] && string[*index] <= 57) {
+        value[i] = string[*index];
+        ++i;
         ++*index;
+    }
+    if (value[0] != NULL) {
         return createNode(value, errorCode);
     }
     else if (string[*index] == '*' || string[*index] == '-' ||
         string[*index] == '+' || string[*index] == '/') {
+        value[0] = string[*index];
         Node* node = createNode(value, errorCode);
         ++*index;
         node->leftChild = splitArithmeticExpression(string, index, errorCode);
@@ -94,25 +100,25 @@ void printTree(Node* node) {
 }
 
 int calculateTheValueOfTheTree(Node* node, int* errorCode) {
-    const int value = node->value[0];
-    if (48 <= value && value <= 57) {
-        return value - '0';
+    if (48 <= node->value[0] && node->value[0] <= 57) {
+        int value = strtol(node->value, NULL, 10);
+        return value;
     }
     if (!strcmp(node->value, "*")) {
         return calculateTheValueOfTheTree(node->leftChild, errorCode) * 
-            calculateTheValueOfTheTree(node->leftChild, errorCode);
+            calculateTheValueOfTheTree(node->rightChild, errorCode);
     }
     else if (!strcmp(node->value, "+")) {
         return calculateTheValueOfTheTree(node->leftChild, errorCode) + 
-            calculateTheValueOfTheTree(node->leftChild, errorCode);
+            calculateTheValueOfTheTree(node->rightChild, errorCode);
     }
     else if (!strcmp(node->value, "-")) {
         return calculateTheValueOfTheTree(node->leftChild, errorCode) - 
-            calculateTheValueOfTheTree(node->leftChild, errorCode);
+            calculateTheValueOfTheTree(node->rightChild, errorCode);
     }
     else if (!strcmp(node->value, "/")) {
         int left = calculateTheValueOfTheTree(node->leftChild, errorCode);
-        int right = calculateTheValueOfTheTree(node->leftChild, errorCode);
+        int right = calculateTheValueOfTheTree(node->rightChild, errorCode);
         if (right == 0) {
             *errorCode = 2;
             return 0;
