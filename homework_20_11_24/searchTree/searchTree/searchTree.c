@@ -32,7 +32,9 @@ void addRightChild(Node* node, Node* child) {
 
 void addElementToTree(Node* node, NodeValue value, int* errorCode) {
     if (node->value.key == value.key) {
+        char* tmp = node->value.value;
         node->value = value;
+        free(tmp);
         return;
     }
     if (node->value.key > value.key && node->leftChild == NULL) {
