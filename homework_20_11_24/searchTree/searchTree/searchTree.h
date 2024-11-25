@@ -37,9 +37,6 @@ NodeValue getValue(Node* node);
 // Add values ​​to node
 void setValue(Node* node, NodeValue value);
 
-// Find the minimum element of the right subtree
-Node* getTheMinimumElementOfTheRightNode(Node* node);
-
 // Delete element by key
 void deleteElementByKey(Node* node, int key);
 

@@ -18,7 +18,11 @@ int main() {
     printf("Remove the given key and its associated value from the dictionary: 3\n");
 
     int errorCode = 0;
-    NodeValue valueFromFirstNode = { 1, "" };
+    char* initialValue = calloc(20, sizeof(char));
+    if (initialValue == NULL) {
+        return 1;
+    }
+    NodeValue valueFromFirstNode = { 1, initialValue };
     Node* tree = createNode(valueFromFirstNode, &errorCode);
     int operationNumber = 9;
     while (operationNumber != 0) {
