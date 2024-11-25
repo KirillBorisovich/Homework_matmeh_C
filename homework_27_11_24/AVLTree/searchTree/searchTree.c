@@ -5,7 +5,6 @@
 
 typedef struct Node {
     NodeValue value;
-    int height;
     Node* leftChild;
     Node* rightChild;
 } Node;
@@ -30,10 +29,9 @@ void addRightChild(Node* node, Node* child) {
 
 void addElementToTree(Node* node, NodeValue value, int* errorCode) {
     if (node->value.key == value.key) {
-        if (node->value.value != NULL) {
-            free(node->value.value);
-        }
+        char* tmp = node->value.value;
         node->value = value;
+        free(tmp);
         return;
     }
     if (node->value.key > value.key && node->leftChild == NULL) {
@@ -69,10 +67,13 @@ void setValue(Node* node, NodeValue value) {
 }
 
 Node* getTheMinimumElementOfTheRightNode(Node* node) {
-    Node* minElement = node->rightChild;
-    while (minElement->leftChild != NULL && minElement->leftChild->leftChild != NULL) {
+    Node* minElementParent = node->rightChild;
+    Node* minElement = minElementParent->leftChild == NULL ? minElementParent : minElementParent->leftChild;
+    while (minElement->leftChild != NULL) {
+        minElementParent = minElement;
         minElement = minElement->leftChild;
     }
+    minElementParent->leftChild = minElement->rightChild == NULL ? NULL : minElement->rightChild;
     return minElement;
 }
 
@@ -95,82 +96,57 @@ bool presenceOfElementByKey(Node* node, int key) {
     return findElementByKey(node, key) != NULL;
 }
 
-Node* findElementByKeyFromRemove(Node* node, int key) {
-    if (node->leftChild != NULL && node->leftChild->value.key == key) {
+Node* findByKeyByRemove(Node* node, int key) {
+    if (node->value.key == key || node == NULL) {
         return node;
     }
-    else if (node->rightChild != NULL && node->rightChild->value.key == key) {
+    else if ((node->leftChild != NULL && node->leftChild->value.key == key) || 
+        (node->rightChild != NULL && node->rightChild->value.key == key)) {
         return node;
     }
     else if (node->value.key > key && node->leftChild != NULL) {
-        findElementByKeyFromRemove(node->leftChild, key);
+        findElementByKey(node->leftChild, key);
     }
     else if (node->value.key < key && node->rightChild != NULL) {
-        findElementByKeyFromRemove(node->rightChild, key);
+        findElementByKey(node->rightChild, key);
     }
     else {
         return NULL;
     }
 }
+
 void deleteElementByKey(Node* node, int key) {
-    Node* elementParent = findElementByKeyFromRemove(node, key);
-    bool right = false;
+    Node* result = NULL;
+    Node* elementParent = findByKeyByRemove(node, key);
     Node* element = NULL;
-    if (elementParent->leftChild != NULL && elementParent->leftChild->value.key == key) {
-        element = elementParent->leftChild;
-    }
-    else if (elementParent->rightChild != NULL && elementParent->rightChild->value.key == key) {
-        element = elementParent->rightChild;
-        right = true;
+    if (elementParent != NULL) {
+        element = node->leftChild != NULL && elementParent->leftChild->value.key == key ?
+            elementParent->leftChild : elementParent->rightChild;
     }
     if (element != NULL) {
         if (element->leftChild == NULL && element->rightChild == NULL) {
-            if (right) {
-                elementParent->rightChild = NULL;
-            }
-            else {
-                elementParent->leftChild = NULL;
-            }
+            result = NULL;
         }
         else if (element->leftChild != NULL && element->rightChild == NULL) {
-            if (right) {
-                elementParent->rightChild = element->leftChild;
-            }
-            else {
-                elementParent->leftChild = element->leftChild;
-            }
+            result = element->leftChild;
         }
         else if (element->leftChild == NULL && element->rightChild != NULL) {
-            if (right) {
-                elementParent->rightChild = element->rightChild;
-            }
-            else {
-                elementParent->leftChild = element->rightChild;
-            }
+            result =  element->rightChild;
         }
         else if (element->leftChild != NULL && element->rightChild != NULL) {
-            Node* elementParentReplacement = getTheMinimumElementOfTheRightNode(element);
-            if (elementParentReplacement->leftChild == NULL) {
-                elementParentReplacement->leftChild = element->leftChild;
-                if (right) {
-                    elementParent->rightChild = elementParentReplacement;
-                }
-                else {
-                    elementParent->leftChild = elementParentReplacement;
-                }
+            Node* elementReplacement = getTheMinimumElementOfTheRightNode(element);
+            if (element->rightChild == elementReplacement) {
+                element->rightChild = NULL;
             }
-            else {
-                Node* elementReplacement = elementParentReplacement->leftChild;
-                elementParentReplacement->rightChild = elementReplacement->rightChild;
-                elementReplacement->leftChild = element->leftChild;
-                elementReplacement->rightChild = element->rightChild;
-                if (right) {
-                    elementParent->rightChild = element;
-                }
-                else {
-                    elementParent->leftChild = element;
-                }
-            }
+            elementReplacement->leftChild = element->leftChild;
+            elementReplacement->rightChild = element->rightChild;
+            result = elementReplacement;
+        }
+        if (elementParent->leftChild == element) {
+            elementParent->leftChild = result;
+        }
+        else {
+            elementParent->rightChild = result;
         }
         char* textValue = element->value.value;
         free(textValue);

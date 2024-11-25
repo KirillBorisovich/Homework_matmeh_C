@@ -53,20 +53,21 @@ bool testGetValue(Node* node) {
 
 bool testAddElementToTree(Node* node, int* errorCode) {
     bool result = false;
-    char* testString = calloc(20, sizeof(char));
-    if (testString == NULL) {
-        return false;
-    }
-    strcpy_s(testString, 20, "qweasd0");
-    NodeValue value = { 0, testString };
-    addElementToTree(node, value, errorCode);
-    Node* child0 = getLeftChild(node);
     Node* child1 = getRightChild(node);
     Node* child2 = getLeftChild(child1);
-    Node* child3 = getRightChild(child1);
-    if (getValue(node).key == 1 && getValue(child1).key == 4 &&
-        getValue(child2).key == 3 && getValue(child3).key == 5 &&
-        getValue(child0).key == 0) {
+    Node* child3 = getRightChild(child2);
+    char* testString = calloc(20, sizeof(char));
+    if (testString == NULL) {
+        *errorCode = 1;
+        return false;
+    }
+    strcpy_s(testString, 19, "qweasd");
+    NodeValue value = { 7, testString };
+    addElementToTree(node, value, errorCode);
+    Node* child4 = getRightChild(child1);
+    if (getValue(node).key == 1 && getValue(child1).key == 5 &&
+        getValue(child2).key == 3 && getValue(child3).key == 4 && 
+        getValue(child4).key == 7) {
         result = true;
     }
     return result;
@@ -76,25 +77,20 @@ bool testFindElementByKey(Node* node, int* errorCode) {
     bool result = false;
     Node* child1 = getRightChild(node);
     Node* child2 = getLeftChild(child1);
-    Node* child3 = getRightChild(child1);
-    if (findElementByKey(node, 1) == node && findElementByKey(node, 4) == child1 &&
-        findElementByKey(node, 3) == child2 && findElementByKey(node, 5) == child3 &&
+    Node* child3 = getRightChild(child2);
+    if (findElementByKey(node, 1) == node && findElementByKey(node, 5) == child1 &&
+        findElementByKey(node, 3) == child2 && findElementByKey(node, 4) == child3 &&
         findElementByKey(node, 123) == NULL) {
         result = true;
     }
     return result;
 }
 
-bool testGetTheMinimumElementOfTheRightNode(Node* node, int* errorCode) {
-    return getValue(getTheMinimumElementOfTheRightNode(node)).key == 4;
-}
-
 bool testDeleteElementByKey(Node* node) {
-    deleteElementByKey(node, 4);
+    deleteElementByKey(node, 5);
     Node* child1 = getRightChild(node);
     Node* child2 = getLeftChild(child1);
-
-    return getValue(child1).key == 5 && getValue(child2).key == 3;
+    return getValue(child1).key == 7 && getValue(child2).key == 3;
 }
 
 bool testTree() {
@@ -116,9 +112,9 @@ bool testTree() {
 
     NodeValue value1 = { 1, textValue1 };
     Node* node = createNode(value1, &errorCode);
-    NodeValue value2 = { 4, textValue2 };
+    NodeValue value2 = { 5, textValue2 };
     NodeValue value3 = { 3, textValue3 };
-    NodeValue value4 = { 5, textValue4 };
+    NodeValue value4 = { 4, textValue4 };
     addElementToTree(node, value2, &errorCode);
     addElementToTree(node, value3, &errorCode);
     addElementToTree(node, value4, &errorCode);
@@ -126,7 +122,6 @@ bool testTree() {
     if (testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&
         testAddRightChildAndGetRightChild() && testGetValue(node) && testAddElementToTree(node, &errorCode) &&
         testFindElementByKey(node, &errorCode) &&
-        testGetTheMinimumElementOfTheRightNode(node, &errorCode) &&
         testDeleteElementByKey(node) && errorCode == 0) {
         result = true;
     }
