@@ -18,7 +18,6 @@ int main() {
     printf("Remove the given key and its associated value from the dictionary: 3\n");
 
     int errorCode = 0;
-    
     char* initialValue = calloc(20, sizeof(char));
     if (initialValue == NULL) {
         return 1;
