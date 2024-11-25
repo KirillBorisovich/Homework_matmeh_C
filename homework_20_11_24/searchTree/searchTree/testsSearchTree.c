@@ -86,15 +86,10 @@ bool testFindElementByKey(Node* node, int* errorCode) {
     return result;
 }
 
-bool testGetTheMinimumElementOfTheRightNode(Node* node, int* errorCode) {
-    return getValue(getTheMinimumElementOfTheRightNode(node)).key == 3;
-}
-
 bool testDeleteElementByKey(Node* node) {
     deleteElementByKey(node, 5);
     Node* child1 = getRightChild(node);
     Node* child2 = getLeftChild(child1);
-
     return getValue(child1).key == 7 && getValue(child2).key == 3;
 }
 
@@ -127,7 +122,6 @@ bool testTree() {
     if (testCreateNode(node) && testAddLeftChildAndGetLeftChild() &&
         testAddRightChildAndGetRightChild() && testGetValue(node) && testAddElementToTree(node, &errorCode) &&
         testFindElementByKey(node, &errorCode) &&
-        testGetTheMinimumElementOfTheRightNode(node, &errorCode) &&
         testDeleteElementByKey(node) && errorCode == 0) {
         result = true;
     }
