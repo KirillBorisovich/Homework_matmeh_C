@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 typedef struct {
-    int key;
-    char* value;
+    const char* key;
+    const char* value;
 } NodeValue;
 
 typedef struct Node Node;
@@ -11,7 +11,7 @@ typedef struct Node Node;
 Node* createNode(NodeValue value, int* errorCode);
 
 // Add element to tree
-void addElementToTree(Node* node, NodeValue value, int* errorCode);
+void addElementToTree(Node** node, NodeValue value, int* errorCode);
 
 // Add left child
 void addLeftChild(Node* node, Node* child);
@@ -38,7 +38,7 @@ NodeValue getValue(Node* node);
 void setValue(Node* node, NodeValue value);
 
 // Delete element by key
-void deleteElementByKey(Node* node, int key);
+void deleteElementByKey(Node** node, int key);
 
 // Remove tree
 void deleteTree(Node* node);
