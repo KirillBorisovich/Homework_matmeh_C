@@ -20,10 +20,10 @@ void addLeftChild(Node* node, Node* child);
 void addRightChild(Node* node, Node* child);
 
 // Find element by key
-Node* findElementByKey(Node* node, int key);
+Node* findElementByKey(Node* node, const char* key);
 
 // Check if an element is present in a tree
-bool presenceOfElementByKey(Node* node, int key);
+bool presenceOfElementByKey(Node* node, const char* key);
 
 // Get left child
 Node* getLeftChild(Node* node);
@@ -38,7 +38,7 @@ NodeValue getValue(Node* node);
 void setValue(Node* node, NodeValue value);
 
 // Delete element by key
-void deleteElementByKey(Node** node, int key);
+void deleteElementByKey(Node** node, const char* key);
 
 // Remove tree
 void deleteTree(Node* node);

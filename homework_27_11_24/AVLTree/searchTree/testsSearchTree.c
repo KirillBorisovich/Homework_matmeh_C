@@ -75,21 +75,21 @@ bool testFindElementByKey(Node* node, int* errorCode) {
     Node* child1 = getRightChild(node);
     Node* child2 = getLeftChild(node);
     Node* child3 = getLeftChild(child1);
-    if (findElementByKey(node, 1) == child2 && findElementByKey(node, 5) == child1 &&
-        findElementByKey(node, 3) == node && findElementByKey(node, 4) == child3 &&
-        findElementByKey(node, 123) == NULL) {
+    if (findElementByKey(node, "1") == child2 && findElementByKey(node, "5") == child1 &&
+        findElementByKey(node, "3") == node && findElementByKey(node, "4") == child3 &&
+        findElementByKey(node, "123") == NULL) {
         result = true;
     }
     return result;
 }
 
 bool testDeleteElementByKey(Node** node) {
-    deleteElementByKey(node, 1);
+    deleteElementByKey(node, "1");
     Node* child1 = getRightChild(*node);
     Node* child2 = getLeftChild(*node);
     
     return !strcmp(getValue(child1).key, "5") && 
-!strcmp(getValue(child2).key, "3");
+        !strcmp(getValue(child2).key, "3");
 }
 
 bool testTree() {

@@ -109,21 +109,21 @@ void addElementToTree(Node** node, NodeValue value, int* errorCode) {
     }
     Node* leftChild = (*node)->leftChild;
     Node* rightChild = (*node)->rightChild;
-    if (strtol((*node)->value.key, NULL, 10) > strtol(value.key, NULL, 10) && (*node)->leftChild == NULL) {
+    if (strcmp((*node)->value.key, value.key) == 1 && (*node)->leftChild == NULL) {
         Node* element = createNode(value, errorCode);
         addLeftChild(*node, element);
         (*node)->leftChild->height = 0;
     }
-    else if (strtol((*node)->value.key, NULL, 10) < strtol(value.key, NULL, 10) && (*node)->rightChild == NULL) {
+    else if (strcmp((*node)->value.key, value.key) == -1 && (*node)->rightChild == NULL) {
         Node* element = createNode(value, errorCode);
         addRightChild(*node, element);
         (*node)->rightChild->height = 0;
         (*node)->height = updateHeight(*node);
     }
-    else if (strtol((*node)->value.key, NULL, 10) > strtol(value.key, NULL, 10)) {
+    else if (strcmp((*node)->value.key, value.key) == 1) {
         addElementToTree(&leftChild, value, errorCode);
     }
-    else if (strtol((*node)->value.key, NULL, 10) < strtol(value.key, NULL, 10)) {
+    else if (strcmp((*node)->value.key, value.key) == -1) {
         addElementToTree(&rightChild, value, errorCode);
     }
     (*node)->height = updateHeight(*node);
@@ -161,14 +161,14 @@ Node* getTheMinimumElementOfTheRightNode(Node* node) {
     node->height = updateHeight(node);
 }
 
-Node* findElementByKey(Node* node, int key) {
-    if (strtol(node->value.key, NULL, 10) == key) {
+Node* findElementByKey(Node* node, const char* key) {
+    if (!strcmp(node->value.key, key)) {
         return node;
     }
-    if (strtol(node->value.key, NULL, 10) > key && node->leftChild != NULL) {
+    if (strcmp(node->value.key, key) == 1 && node->leftChild != NULL) {
         findElementByKey(node->leftChild, key);
     }
-    else if (strtol(node->value.key, NULL, 10) < key && node->rightChild != NULL) {
+    else if (strcmp(node->value.key, key) == -1 && node->rightChild != NULL) {
         findElementByKey(node->rightChild, key);
     }
     else {
@@ -176,38 +176,38 @@ Node* findElementByKey(Node* node, int key) {
     }
 }
 
-bool presenceOfElementByKey(Node* node, int key) {
+bool presenceOfElementByKey(Node* node, const char* key) {
     return findElementByKey(node, key) != NULL;
 }
 
-Node* findByKeyByRemove(Node* node, int key) {
-    if (strtol(node->value.key, NULL, 10) == key || node == NULL) {
+Node* findByKeyByRemove(Node* node, char* key) {
+    if (!strcmp(node->value.key, key) || node == NULL) {
         return node;
     }
-    else if ((node->leftChild != NULL && strtol(node->leftChild->value.key, NULL, 10) == key) || 
-        (node->rightChild != NULL && strtol(node->rightChild->value.key, NULL, 10) == key)) {
+    else if ((node->leftChild != NULL && !strcmp(node->leftChild->value.key, key)) || 
+        (node->rightChild != NULL && !strcmp(node->rightChild->value.key, key))) {
         return node;
     }
-    else if (strtol(node->value.key, NULL, 10) > key && node->leftChild != NULL) {
-        findElementByKey(node->leftChild, key);
+    else if (strcmp(node->value.key, key) == 1 && node->leftChild != NULL) {
+        findByKeyByRemove(node->leftChild, key);
     }
-    else if (strtol(node->value.key, NULL, 10) < key && node->rightChild != NULL) {
-        findElementByKey(node->rightChild, key);
+    else if (strcmp(node->value.key, key) == -1 && node->rightChild != NULL) {
+        findByKeyByRemove(node->rightChild, key);
     }
     else {
         return NULL;
     }
 }
 
-void deleteElementByKey(Node** node, int key) {
+void deleteElementByKey(Node** node, const char* key) {
     Node* leftChild = (*node)->leftChild;
     Node* rightChild = (*node)->rightChild;
-    if (((*node)->leftChild != NULL && strtol((*node)->leftChild->value.key, NULL, 10) == key) ||
-        ((*node)->rightChild != NULL && strtol((*node)->rightChild->value.key, NULL, 10) == key)) {
+    if (((*node)->leftChild != NULL && !strcmp((*node)->leftChild->value.key, key)) ||
+        ((*node)->rightChild != NULL && !strcmp((*node)->rightChild->value.key, key))) {
         Node* result = NULL;
         Node* elementParent = *node;
         Node* element = (*node)->leftChild != NULL && 
-            strtol(elementParent->leftChild->value.key, NULL, 10) == key ?
+            !strcmp(elementParent->leftChild->value.key, key) ?
             elementParent->leftChild : elementParent->rightChild;
         if (element != NULL) {
             if (element->leftChild == NULL && element->rightChild == NULL) {
