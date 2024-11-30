@@ -103,13 +103,17 @@ void addRightChild(Node* node, Node* child) {
 }
 
 void addElementToTree(Node** node, NodeValue value, int* errorCode) {
-    if (!strcmp((*node)->value.key, value.key)) {
-        deleteElementByKey(node, strtol(value.key, NULL, 10));
-        addElementToTree(node, value, errorCode);
+    if (*node == NULL) {
+        *node = createNode(value, errorCode);
+        return;
     }
     Node* leftChild = (*node)->leftChild;
     Node* rightChild = (*node)->rightChild;
-    if (strcmp((*node)->value.key, value.key) == 1 && (*node)->leftChild == NULL) {
+    if (*node != NULL && !strcmp((*node)->value.key, value.key)) {
+        deleteElementByKey(node, value.key);
+        addElementToTree(node, value, errorCode);
+    }
+    else if (strcmp((*node)->value.key, value.key) == 1 && (*node)->leftChild == NULL) {
         Node* element = createNode(value, errorCode);
         addLeftChild(*node, element);
         (*node)->leftChild->height = 0;
@@ -162,10 +166,13 @@ Node* getTheMinimumElementOfTheRightNode(Node* node) {
 }
 
 Node* findElementByKey(Node* node, const char* key) {
-    if (!strcmp(node->value.key, key)) {
+    if (node == NULL) {
+        return NULL;
+    }
+    else if (!strcmp(node->value.key, key)) {
         return node;
     }
-    if (strcmp(node->value.key, key) == 1 && node->leftChild != NULL) {
+    else if (strcmp(node->value.key, key) == 1 && node->leftChild != NULL) {
         findElementByKey(node->leftChild, key);
     }
     else if (strcmp(node->value.key, key) == -1 && node->rightChild != NULL) {
@@ -202,13 +209,21 @@ Node* findByKeyByRemove(Node* node, char* key) {
 void deleteElementByKey(Node** node, const char* key) {
     Node* leftChild = (*node)->leftChild;
     Node* rightChild = (*node)->rightChild;
+
     if (((*node)->leftChild != NULL && !strcmp((*node)->leftChild->value.key, key)) ||
-        ((*node)->rightChild != NULL && !strcmp((*node)->rightChild->value.key, key))) {
-        Node* result = NULL;
+        ((*node)->rightChild != NULL && !strcmp((*node)->rightChild->value.key, key)) || 
+        !strcmp((*node)->value.key, key)) {
+        Node* result = NULL; 
         Node* elementParent = *node;
-        Node* element = (*node)->leftChild != NULL && 
-            !strcmp(elementParent->leftChild->value.key, key) ?
-            elementParent->leftChild : elementParent->rightChild;
+        Node* element = NULL;
+        if (!strcmp((*node)->value.key, key)) {
+            element = *node;
+        }
+        else {
+            element = (*node)->leftChild != NULL &&
+                !strcmp(elementParent->leftChild->value.key, key) ?
+                elementParent->leftChild : elementParent->rightChild;
+        }
         if (element != NULL) {
             if (element->leftChild == NULL && element->rightChild == NULL) {
                 result = NULL;
@@ -236,13 +251,18 @@ void deleteElementByKey(Node** node, const char* key) {
             if (elementParent->leftChild == element) {
                 elementParent->leftChild = result;
             }
-            else {
+            else if (elementParent->rightChild == element) {
                 elementParent->rightChild = result;
+            }
+            else {
+                *node = result;
             }
             if (result != NULL) {
                 result->height = updateHeight(result);
             }
-            --elementParent->height;
+            if (elementParent != NULL) {
+                --elementParent->height;
+            }
             const char* textKey = element->value.key;
             const char* textValue = element->value.value;
             free(textKey);
@@ -250,15 +270,17 @@ void deleteElementByKey(Node** node, const char* key) {
             free(element);
         }
     }
-    else if (strtol((*node)->value.key, NULL, 10) > key && (*node)->leftChild != NULL) {
+    else if (strcmp((*node)->value.key, key) == 1 && (*node)->leftChild != NULL) {
         deleteElementByKey(&leftChild, key);
     }
-    else if (strtol((*node)->value.key, NULL, 10) < key && (*node)->rightChild != NULL) {
+    else if (strcmp((*node)->value.key, key) == -1 && (*node)->rightChild != NULL) {
         deleteElementByKey(&rightChild, key);
     }
-    (*node)->height = updateHeight(*node);
-    if (abs(getHeight((*node)->leftChild) - getHeight((*node)->rightChild)) >= 2) {
-        treeBalancing(node);
+    if (*node != NULL) {
+        (*node)->height = updateHeight(*node);
+        if (abs(getHeight((*node)->leftChild) - getHeight((*node)->rightChild)) >= 2) {
+            treeBalancing(node);
+        }
     }
 }
 
