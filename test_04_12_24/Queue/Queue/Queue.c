@@ -16,7 +16,7 @@ Queue* createQueue(int* errorCode) {
         *errorCode = 1;
         return NULL;
     }
-    result->array = calloc(100, sizeof(int));
+    result->array = calloc(2, sizeof(int));
     if (result->array == NULL) {
         *errorCode = 1;
         return NULL;
@@ -33,14 +33,15 @@ void deleteQueue(Queue* queue) {
 }
 
 int dequeue(Queue* queue) {
-    int element = queue->array[queue->head];
+    int element = queue->array[queue->head % queue->maxSize];
     ++queue->head;
     return element;
 }
 
 void enqueue(Queue* queue, int value, int* errorCode) {
-    if (queue->tail == queue->maxSize - 1) {
-        int* tmp = realloc(queue->array, 200 * sizeof(int));
+    if (queue->tail - queue->head == queue->maxSize) {
+        int* tmp = realloc(queue->array, 2 * sizeof(int));
+        queue->maxSize *= 2;
         if (tmp != NULL) {
             queue->array = tmp;
         }
@@ -50,7 +51,7 @@ void enqueue(Queue* queue, int value, int* errorCode) {
             return;
         }
     }
-    queue->array[queue->tail] = value;
+    queue->array[queue->tail % queue->maxSize] = value;
     ++queue->tail;
 }
 
