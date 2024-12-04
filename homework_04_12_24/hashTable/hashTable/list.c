@@ -4,7 +4,7 @@
 #include "list.h"
 
 typedef struct ListElement {
-    int value;
+    Value value;
     ListElement* next;
 }ListElement;
 
@@ -34,7 +34,7 @@ Position first(List* list) {
     return list->head;
 }
 
-int add(List* list, Position position, int value, int* errorCode) {
+int add(List* list, Position position, Value value, int* errorCode) {
     ListElement* element = malloc(sizeof(ListElement));
     if (element == NULL) {
         *errorCode = 1;
@@ -52,11 +52,11 @@ int add(List* list, Position position, int value, int* errorCode) {
     }
 }
 
-void addInHead(List* list, int value, int* errorCode) {
+void addInHead(List* list, Value value, int* errorCode) {
     add(list, first(list), value, errorCode);
 }
 
-void addInTail(List* list, int value, int* errorCode) {
+void addInTail(List* list, Value value, int* errorCode) {
     Position position = list->tail;
     add(list, position, value, errorCode);
     list->tail = next(position);
@@ -65,14 +65,10 @@ void addInTail(List* list, int value, int* errorCode) {
 void removeElement(List* list, Position position) {
     ListElement* tmp = position->next;
     position->next = position->next->next;
+    free(tmp->value.key);
     free(tmp);
     tmp = NULL;
     --list->size;
-}
-
-void removeInHead(List* list) {
-    ListElement* element = calloc(1, sizeof(ListElement));
-
 }
 
 Position getElement(List* list, int index) {
@@ -94,7 +90,7 @@ Value getValue(List* list, Position position) {
     }
 }
 
-Value getSizeList(List* list) {
+int getSizeList(List* list) {
     return list->size;
 }
 

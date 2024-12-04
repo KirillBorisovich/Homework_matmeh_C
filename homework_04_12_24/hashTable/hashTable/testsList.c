@@ -6,7 +6,8 @@
 bool testCreateList() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    addInHead(list, 1, &errorCode);
+    Value value = { NULL, 1 };
+    addInHead(list, value, &errorCode);
     bool result = list != NULL ? true : false;
     deleteList(list);
     return result && errorCode == 0;
@@ -15,8 +16,9 @@ bool testCreateList() {
 bool testGetValue() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    addInHead(list, 1, &errorCode);
-    bool result = getValue(list, first(list)) == 1 ? true : false;
+    Value value = { NULL, 1 };
+    addInHead(list, value, &errorCode);
+    bool result = getValue(list, first(list)).counter == 1 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -24,8 +26,9 @@ bool testGetValue() {
 bool testAddInHead() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    addInHead(list, 1, &errorCode);
-    bool result = getValue(list, first(list)) == 1 ? true : false;
+    Value value = { NULL, 1 };
+    addInHead(list, value, &errorCode);
+    bool result = getValue(list, first(list)).counter == 1 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -33,14 +36,17 @@ bool testAddInHead() {
 bool testAddInTail() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    addInTail(list, 1, &errorCode);
-    addInTail(list, 2, &errorCode);
-    addInTail(list, 3, &errorCode);
-    bool result = getValue(list, first(list)) == 1 ? true : false;
+    Value value1 = { NULL, 1 };
+    Value value2 = { NULL, 2 };
+    Value value3 = { NULL, 3 };
+    addInTail(list, value1, &errorCode);
+    addInTail(list, value2, &errorCode);
+    addInTail(list, value3, &errorCode);
+    bool result = getValue(list, first(list)).counter == 1 ? true : false;
     removeElement(list, first(list));
-    result = getValue(list, first(list)) == 2 ? true : false;
+    result = getValue(list, first(list)).counter == 2 ? true : false;
     removeElement(list, first(list));
-    result = getValue(list, first(list)) == 3 ? true : false;
+    result = getValue(list, first(list)).counter == 3 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -49,11 +55,13 @@ bool testAdd() {
     int errorCode = 0;
     List* list = createList(&errorCode);
     Position position = first(list);
-    add(list, position, 1, &errorCode);
-    add(list, position, 2, &errorCode);
-    bool result = getValue(list, first(list)) == 2 ? true : false;
+    Value value1 = { NULL, 1 };
+    Value value2 = { NULL, 2 };
+    add(list, position, value1, &errorCode);
+    add(list, position, value2, &errorCode);
+    bool result = getValue(list, first(list)).counter == 2 ? true : false;
     removeElement(list, position);
-    result = getValue(list, first(list)) == 1 ? true : false;
+    result = getValue(list, first(list)).counter == 1 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -62,11 +70,14 @@ bool testRemoveElement() {
     int errorCode = 0;
     List* list = createList(&errorCode);
     Position position = first(list);
-    addInHead(list, 3, &errorCode);
-    addInHead(list, 2, &errorCode);
-    addInHead(list, 1, &errorCode);
+    Value value1 = { NULL, 1 };
+    Value value2= { NULL, 2 };
+    Value value3 = { NULL, 3 };
+    addInHead(list, value3, &errorCode);
+    addInHead(list, value2, &errorCode);
+    addInHead(list, value1, &errorCode);
     removeElement(list, position);
-    bool result = getValue(list, position) == 2 ? true : false;
+    bool result = getValue(list, position).counter == 2 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }
@@ -74,10 +85,13 @@ bool testRemoveElement() {
 bool testGetElement() {
     int errorCode = 0;
     List* list = createList(&errorCode);
-    addInHead(list, 1, &errorCode);
-    addInHead(list, 2, &errorCode);
-    addInHead(list, 3, &errorCode);
-    bool result = getValue(list, getElement(list, 1)) == 2 ? true : false;
+    Value value1 = { NULL, 1 };
+    Value value2 = { NULL, 2 };
+    Value value3 = { NULL, 3 };
+    addInHead(list, value1, &errorCode);
+    addInHead(list, value2, &errorCode);
+    addInHead(list, value3, &errorCode);
+    bool result = getValue(list, getElement(list, 1)).counter == 2 ? true : false;
     deleteList(list);
     return result && errorCode == 0;
 }

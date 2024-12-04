@@ -6,7 +6,10 @@ typedef struct List List;
 
 typedef ListElement* Position;
 
-typedef int Value;
+typedef struct {
+    const char* key;
+    int counter;
+} Value;
 
 // Create a list
 List* createList(int* errorCode);
@@ -15,13 +18,13 @@ List* createList(int* errorCode);
 Position first(List* list);
 
 // Add element by position
-int add(List* list, Position position, int value, int* errorCode);
+int add(List* list, Position position, Value value, int* errorCode);
 
 // Add element to head
-void addInHead(List* list, int value, int* errorCode);
+void addInHead(List* list, Value value, int* errorCode);
 
 // Add element to tail
-void addInTail(List* list, int value, int* errorCode);
+void addInTail(List* list, Value value, int* errorCode);
 
 // Delete element by position
 void removeElement(List* list, Position position);
@@ -42,7 +45,7 @@ bool isValid(List* list, Position position);
 Position next(Position position);
 
 // Get the size of an list
-Value getSizeList(List* list);
+int getSizeList(List* list);
 
 // Delete list
 void deleteList(List* list);
