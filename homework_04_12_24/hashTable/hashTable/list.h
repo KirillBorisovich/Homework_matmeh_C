@@ -7,7 +7,7 @@ typedef struct List List;
 typedef ListElement* Position;
 
 typedef struct {
-    const char* key;
+    char* key;
     int counter;
 } Value;
 
@@ -35,11 +35,17 @@ Position getElement(List* list, int index);
 // Get the value of an element
 Value getValue(List* list, Position position);
 
+// Add one to the counter
+void addOneToTheCounter(Position position);
+
 // Returns true if this is the last element
 bool isLast(List* list, Position position);
 
 // Returns true if this is an existing element
 bool isValid(List* list, Position position);
+
+// Checks if a list contains elements. If empty, then true
+bool isEmpty(List* list);
 
 // Getting the next element
 Position next(Position position);

@@ -12,7 +12,7 @@ typedef struct List {
     ListElement* head;
     ListElement* tail;
     int size;
-};
+} List;
 
 List* createList(int* errorCode) {
     List* list = malloc(sizeof(List));
@@ -88,6 +88,10 @@ Value getValue(List* list, Position position) {
     if (position->next != NULL) {
         return position->next->value;
     }
+}
+
+void addOneToTheCounter(Position position) {
+    ++position->value.counter;
 }
 
 int getSizeList(List* list) {

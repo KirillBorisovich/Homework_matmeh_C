@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "list.h"
-#include "testsList.h"
 #include "hashTable.h"
+#include "testsList.h"
+#include "testsHashTable.h"
+
 
 int main(void) {
-    if (!testList()) {
+    if (testProgram()) {
         printf("Test failed!\n");
         return 123;
     }
@@ -18,7 +20,7 @@ int main(void) {
     }
 
     char symbol = '\0';
-    List** hashTable = calloc(100, sizeof(List*));    
+    List** hashTable = calloc(100, sizeof(List*));
     char* buffer = calloc(1024, sizeof(char));
     if (buffer == NULL || hashTable == NULL) {
         printf("Memory allocation error!\n");
