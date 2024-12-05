@@ -9,6 +9,8 @@ typedef struct HashTable {
     List** array;
     int size;
     int numberOfElementsInTheTable;
+    int maxLenght;
+    int numberOfLists;
 } HashTable;
 
 HashTable* createHashTable(int* errorCode) {
@@ -24,7 +26,21 @@ HashTable* createHashTable(int* errorCode) {
     }
     result->size = 2;
     result->numberOfElementsInTheTable = 0;
+    result->numberOfLists = 0;
+    result->maxLenght = 0;
     return result;
+}
+
+float getFillFactor(HashTable* hashTable) {
+    return (float)hashTable->numberOfElementsInTheTable / hashTable->size;
+}
+
+int getMaxLenght(HashTable* hashTable) {
+    return hashTable->maxLenght;
+}
+
+int getAverageListLength(HashTable* hashTable) {
+    return hashTable->numberOfElementsInTheTable / hashTable->numberOfLists;
 }
 
 int hashFunction(char* key) {
@@ -39,13 +55,16 @@ void addValueToHashTable(HashTable* hashTable, Value value, int* errorCode) {
     int index = hashFunction(value.key) % hashTable->size;
     if (hashTable->array[index] == NULL) {
         hashTable->array[index] = createList(errorCode);
+        ++hashTable->numberOfLists;
     }
     Position position = next(first(hashTable->array[index]));
     if (isEmpty(hashTable->array[index]) || (next(position) == NULL &&
         strcmp(getValue(hashTable->array[index], position).key, value.key))) {
         addInHead(hashTable->array[index], value, errorCode);
         ++hashTable->numberOfElementsInTheTable;
-
+        if (hashTable->maxLenght < getSizeList(hashTable->array[index])) {
+            hashTable->maxLenght = getSizeList(hashTable->array[index]);
+        }
         //Adding memory
         if (((float)hashTable->numberOfElementsInTheTable / (float)hashTable->size) * 10 > 6) {
             List** tmp = hashTable->array;
@@ -53,6 +72,8 @@ void addValueToHashTable(HashTable* hashTable, Value value, int* errorCode) {
             hashTable->array = calloc(2 * hashTable->size, sizeof(List*));
             hashTable->size *= 2;
             hashTable->numberOfElementsInTheTable = 0;
+            hashTable->numberOfLists = 0;
+            hashTable->maxLenght = 0;
             if (hashTable->array == NULL) {
                 *errorCode = 1;
                 return;
@@ -61,18 +82,18 @@ void addValueToHashTable(HashTable* hashTable, Value value, int* errorCode) {
                 if (tmp[i] == NULL) {
                     continue;
                 }
-                Position positionForAddingMemory = next(first(tmp[i]));
+                Position positionForAddingMemory = first(tmp[i]);
                 do {
                     addValueToHashTable(hashTable, getValue(tmp[i], positionForAddingMemory), errorCode);
                     positionForAddingMemory = next(positionForAddingMemory);
-                } while (positionForAddingMemory != NULL);
+                } while (next(positionForAddingMemory) != NULL);
                 deleteListWithoutErasingValues(tmp[i]);
             }
             free(tmp);
         }
     }
     else {
-        while (strcmp(getValue(hashTable->array[index], position).key, value.key) ||
+        while (strcmp(getValue(hashTable->array[index], position).key, value.key) &&
             next(position) != NULL) {
             position = next(position);
         }
@@ -91,8 +112,8 @@ int getWordFrequencyFromHashTable(HashTable* hashTable, char* key) {
     if (isEmpty(hashTable->array[index])) {
         return 0;
     }
-    Position position = next(first(hashTable->array[index]));
-    while (strcmp(getValue(hashTable->array[index], position).key, key) ||
+    Position position = first(hashTable->array[index]);
+    while (strcmp(getValue(hashTable->array[index], position).key, key) &&
         next(position) != NULL) {
         position = next(position);
     }
@@ -112,12 +133,12 @@ void printValuesOfTheEntireHashTable(HashTable* hashTable) {
         if (hashTable->array[i] == NULL) {
             continue;
         }
-        Position position = next(first(hashTable->array[i]));
+        Position position = first(hashTable->array[i]);
         do {
             Value value = getValue(hashTable->array[i], position);
-            printf("Key: %s, frequency: %d\n", value.key, value.counter);
+            printf("Key: %s\nFrequency: %d\n\n", value.key, value.counter);
             position = next(position);
-        } while (position != NULL);
+        } while (next(position) != NULL);
     }
 }
 

@@ -40,5 +40,5 @@ bool testProgram() {
         result = true;
     }
     deleteHashTable(hashTable);
-    return result;
+    return result && errorCode == 0 && testList();
 }
