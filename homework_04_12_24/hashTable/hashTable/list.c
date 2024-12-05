@@ -122,3 +122,17 @@ void deleteList(List* list) {
     free(list);
     list = NULL;
 }
+
+void deleteListWithoutErasingValues(List* list) {
+    Position position = first(list);
+    while (list->head->next != NULL) {
+        ListElement* tmp = position->next;
+        position->next = position->next->next;
+        free(tmp);
+        tmp = NULL;
+        --list->size;
+    }
+    free(list->head);
+    free(list);
+    list = NULL;
+}

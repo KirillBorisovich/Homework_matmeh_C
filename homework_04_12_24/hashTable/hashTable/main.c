@@ -8,7 +8,7 @@
 
 
 int main(void) {
-    if (testProgram()) {
+    if (!testProgram()) {
         printf("Test failed!\n");
         return 123;
     }

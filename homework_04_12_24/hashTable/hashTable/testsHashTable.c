@@ -9,6 +9,7 @@
 
 bool testProgram() {
     int errorCode = 0;
+    bool result = false;
 
     HashTable* hashTable = createHashTable(&errorCode);
     char* testText1 = calloc(20, sizeof(char));
@@ -33,5 +34,11 @@ bool testProgram() {
     addValueToHashTable(hashTable, value3, &errorCode);
     addValueToHashTable(hashTable, value4, &errorCode);
 
-    printValuesOfTheEntireHashTable(hashTable);
+    if (getWordFrequencyFromHashTable(hashTable, "testText1") == 2 &&
+        getWordFrequencyFromHashTable(hashTable, "testText2") == 1 &&
+        getWordFrequencyFromHashTable(hashTable, "testText123") == 0) {
+        result = true;
+    }
+    deleteHashTable(hashTable);
+    return result;
 }

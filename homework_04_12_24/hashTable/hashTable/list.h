@@ -55,3 +55,6 @@ int getSizeList(List* list);
 
 // Delete list
 void deleteList(List* list);
+
+// Delete list without erasing values
+void deleteListWithoutErasingValues(List* list);

@@ -52,6 +52,7 @@ void addValueToHashTable(HashTable* hashTable, Value value, int* errorCode) {
             int oldSize = hashTable->size;
             hashTable->array = calloc(2 * hashTable->size, sizeof(List*));
             hashTable->size *= 2;
+            hashTable->numberOfElementsInTheTable = 0;
             if (hashTable->array == NULL) {
                 *errorCode = 1;
                 return;
@@ -65,7 +66,7 @@ void addValueToHashTable(HashTable* hashTable, Value value, int* errorCode) {
                     addValueToHashTable(hashTable, getValue(tmp[i], positionForAddingMemory), errorCode);
                     positionForAddingMemory = next(positionForAddingMemory);
                 } while (positionForAddingMemory != NULL);
-                deleteList(tmp[i]);
+                deleteListWithoutErasingValues(tmp[i]);
             }
             free(tmp);
         }
@@ -101,6 +102,9 @@ int getWordFrequencyFromHashTable(HashTable* hashTable, char* key) {
     else if (next(position) == NULL) {
         return 0;
     }
+    else {
+        return 0;
+    }
 }
 
 void printValuesOfTheEntireHashTable(HashTable* hashTable) {
@@ -119,7 +123,9 @@ void printValuesOfTheEntireHashTable(HashTable* hashTable) {
 
 void deleteHashTable(HashTable* hashTable) {
     for (int i = 0; i < hashTable->size; ++i) {
-        deleteList(hashTable->array[i]);
+        if (hashTable->array[i] != NULL) {
+            deleteList(hashTable->array[i]);
+        }
     }
     free(hashTable);
 }
