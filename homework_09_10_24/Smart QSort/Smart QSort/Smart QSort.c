@@ -42,9 +42,13 @@ void insertSort(int array[], int first, int last) {
 	}
 }
 
-void qSort(int array[], int first, int last) {
-	if (first < last) {
-		int supportingElement = array[first];
+void smartQSort(int array[], int first, int last) {
+	if (last - first + 1 < 10) {
+		insertSort(array, first, last);
+	}
+	else {
+		if (first < last) {
+		int supportingElement = array[rand() % (last - first + 1)];
 		int left = first;
 		int right = last;
 		while (left <= right) {
@@ -60,17 +64,9 @@ void qSort(int array[], int first, int last) {
 				--right;
 			}
 		}
-		qSort(array, first, right);
-		qSort(array, left, last);
-	}
-}
-
-void smartQSort(int array[], int first, int last) {
-	if (last - first + 1 < 10) {
-		insertSort(array, first, last);
-	}
-	else {
-		qSort(array, first, last);
+		smartQSort(array, first, right);
+		smartQSort(array, left, last);
+		}
 	}
 }
 
