@@ -33,4 +33,4 @@ Node* getTheNearestElement(Node* node);
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode);
 
 // Delete graph
-void deleteGraph(Graph* graph);
+void wrapDeleteGraph(Graph* graph, int* errorCode);

@@ -6,7 +6,6 @@ typedef struct List List;
 
 typedef struct Node Node;
 
-
 typedef ListElement* Position;
 
 typedef struct {
@@ -45,7 +44,7 @@ bool isLast(List* list, Position position);
 bool isValid(List* list, Position position);
 
 // Check if an item is in a list
-bool elementInList(List* list, Node* node);
+bool nodeInList(List* list, Node* node);
 
 // Checks if a list contains elements. If empty, then true
 bool isEmpty(List* list);

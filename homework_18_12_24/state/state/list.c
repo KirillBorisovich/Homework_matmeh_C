@@ -70,6 +70,7 @@ void addInTail(List* list, Value value, int* errorCode) {
 void removeElement(List* list, Position position) {
     ListElement* tmp = position->next;
     position->next = position->next->next;
+    free(tmp->value.node);
     free(tmp);
     tmp = NULL;
     --list->size;
@@ -110,7 +111,7 @@ bool isEmpty(List* list) {
     return list->head->next == NULL;
 }
 
-bool elementInList(List* list, Node* node) {
+bool nodeInList(List* list, Node* node) {
     Position position = first(list);
     while (next(position) != NULL) {
         if (node == getValue(list, position).node) {

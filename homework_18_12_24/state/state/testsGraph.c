@@ -30,6 +30,6 @@ bool testGraph() {
         result = true;
     }
 
-    deleteGraph(graph);
+    wrapDeleteGraph(graph, &errorCode);
     return result && errorCode == 0;
 }

@@ -61,7 +61,7 @@ void findNodeInGraph(Node* node, Node** findNode, int name, List* list, int* err
     Position positon = first(node->matchList);
     while (next(positon) != NULL) {
         Node* valueNode = getValue(node->matchList, positon).node;
-        if (!elementInList(list, valueNode)) {
+        if (!nodeInList(list, valueNode)) {
             findNodeInGraph(valueNode, findNode, name, list, errorCode);
         }
         positon = next(positon);
@@ -75,6 +75,7 @@ Node* wrapFindNodeInGraph(Graph* graph, int name, int* errorCode) {
     Node* findNode = NULL;
     List* list = createList(errorCode);
     findNodeInGraph(graph->peaks[0], &findNode, name, list, errorCode);
+    deleteListWithoutErasingValues(list);
     return findNode;
 }
 
@@ -118,8 +119,13 @@ void createAPath(Graph* graph, int nameOfTheShipment, int arrivalName,
     if (childElement == NULL) {
         childElement = createNode(arrivalName, errorCode);
     }
-    Value path = { childElement, length };
-    addInHead(node->matchList, path, errorCode);
+    if (nodeInList(node->matchList, childElement)) {
+        return;
+    }
+    Value path1 = { childElement, length };
+    Value path2 = { node, length };
+    addInHead(node->matchList, path1, errorCode);
+    addInHead(childElement->matchList, path2, errorCode);
 }
 
 Node* getTheNearestElement(Node* node) {
@@ -149,8 +155,7 @@ void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
     Position positon = first(node->matchList);
     while (next(positon) != NULL) {
         Node* valueNode = getValue(node->matchList, positon).node;
-        if (!elementInList(list, valueNode)) {
-            printf("%d ", valueNode->name);
+        if (!nodeInList(list, valueNode)) {
             depthFirstTraversalOfAGraph(valueNode, list, errorCode);
         }
         positon = next(positon);
@@ -163,8 +168,10 @@ void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode) {
     deleteListWithoutErasingValues(list);
 }
 
-// problem!
 void deleteGraph(Node* node, List* list, int* errorCode) {
+    if (nodeInList(list, node)) {
+        return;
+    }
     Value value = { node, 0 };
     addInHead(list, value, errorCode);
     if (isEmpty(node->matchList)) {
@@ -175,21 +182,17 @@ void deleteGraph(Node* node, List* list, int* errorCode) {
     Position positon = first(node->matchList);
     while (next(positon) != NULL) {
         Node* valueNode = getValue(node->matchList, positon).node;
-        if (!elementInList(list, valueNode)) {
+        if (!nodeInList(list, valueNode)) {
             deleteGraph(valueNode, list, errorCode);
         }
         positon = next(positon);
     }
+    deleteListWithoutErasingValues(node->matchList);
+    free(node);
 }
 
-void wrapDeleteGraph(Graph* graph) {
-    for (int i = 0; i < graph->size; ++i) {
-        if (graph->peaks[i] == NULL) {
-            continue;
-        }
-        Node* node = graph->peaks[i + 1];
-        deleteList(graph->peaks[i]->matchList);
-        free(graph->peaks[i]);
-    }
-    free(graph);
+void wrapDeleteGraph(Graph* graph, int* errorCode) {
+    List* list = createList(errorCode);
+    deleteGraph(graph->peaks[0], list, errorCode);
+    deleteListWithoutErasingValues(list);
 }
