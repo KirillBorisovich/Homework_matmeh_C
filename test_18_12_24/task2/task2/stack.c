@@ -45,6 +45,7 @@ void deleteStack(Stack* stack) {
     while (stack->head != NULL) {
         pop(stack);
     }
+    free(stack);
 }
 
 int getValue(Stack* stack) {
