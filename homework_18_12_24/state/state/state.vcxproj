@@ -130,12 +130,14 @@
     <ClCompile Include="graph.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="readingFromFile.c" />
     <ClCompile Include="testsGraph.c" />
     <ClCompile Include="testsList.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h" />
     <ClInclude Include="list.h" />
+    <ClInclude Include="readingFromFile.h" />
     <ClInclude Include="testsGraph.h" />
     <ClInclude Include="testsList.h" />
   </ItemGroup>
