@@ -20,7 +20,6 @@ int main(void) {
     }
     readingFromFile(file, graph, errorCode);
     fclose(file);
-    //int name = wrapDepthFirstTraversalOfAGraph(wrapFindNodeInGraph(graph, 10, &errorCode), &errorCode);
+    wrapDepthFirstTraversalOfAGraph(wrapFindNodeInGraph(graph, 10, &errorCode), &errorCode);
 
-    
 }

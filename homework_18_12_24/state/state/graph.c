@@ -147,6 +147,9 @@ Node* getTheNearestElement(Node* node) {
 }
 
 void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
+    if (nodeInList(list, node)) {
+        return;
+    }
     Value value = { node, 0 };
     addInHead(list, value, errorCode);
     if (isEmpty(node->matchList)) {
@@ -160,6 +163,7 @@ void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
         }
         positon = next(positon);
     }
+
 }
 
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode) {

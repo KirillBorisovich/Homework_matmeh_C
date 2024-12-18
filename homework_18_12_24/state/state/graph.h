@@ -30,6 +30,7 @@ void createAPath(Graph* graph, int nameOfTheShipment, int arrivalName, int lengt
 // Get the nearest element
 Node* getTheNearestElement(Node* node);
 
+// Go deep
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode);
 
 // Delete graph
