@@ -6,6 +6,7 @@
 typedef struct ListElement {
     Value value;
     ListElement* next;
+    ListElement* previous;
 }ListElement;
 
 typedef struct List {
@@ -40,6 +41,10 @@ Position first(List* list) {
     return list->head;
 }
 
+Position last(List* list) {
+    return list->tail;
+}
+
 int add(List* list, Position position, Value value, int* errorCode) {
     ListElement* element = malloc(sizeof(ListElement));
     if (element == NULL) {
@@ -48,11 +53,18 @@ int add(List* list, Position position, Value value, int* errorCode) {
     }
     element->value = value;
     if (position != NULL) {
+        if (position->next != NULL) {
+            position->next->previous = element;
+        }
         element->next = position->next;
         position->next = element;
+        element->previous = position;
         if (list->size == 0) {
             list->tail = element;
             list->head->next = element;
+        }
+        else if (list->size == 1) {
+            list->tail = list->head->next;
         }
         ++list->size;
     }
@@ -64,14 +76,42 @@ void addInHead(List* list, Value value, int* errorCode) {
 
 void addInTail(List* list, Value value, int* errorCode) {
     Position position = list->tail;
-    add(list, position, value, errorCode);
+    if (list->size < 1) {
+        addInHead(list, value, errorCode);
+        return;
+    }
+    else if (list->size == 1) {
+        add(list, position, value, errorCode);
+        return;
+    }
+    add(list, position->next, value, errorCode);
     list->tail = next(position);
 }
 
 void removeElement(List* list, Position position) {
     ListElement* tmp = position->next;
-    position->next = position->next->next;
+    if (position == list->tail) {
+        list->tail = list->tail->previous;
+        position->next = NULL;
+    }
+    else {
+        position->next = position->next->next;
+    }
     free(tmp->value.node);
+    free(tmp);
+    tmp = NULL;
+    --list->size;
+}
+
+void removeElementWithoutErasingValues(List* list, Position position) {
+    ListElement* tmp = position->next;
+    if (position == list->tail) {
+        list->tail = list->tail->previous;
+        position->next = NULL;
+    }
+    else {
+        position->next = position->next->next;
+    }
     free(tmp);
     tmp = NULL;
     --list->size;

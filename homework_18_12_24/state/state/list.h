@@ -19,6 +19,9 @@ List* createList(int* errorCode);
 // Position of the first element
 Position first(List* list);
 
+// Position of the last element
+Position last(List* list);
+
 // Add element by position
 int add(List* list, Position position, Value value, int* errorCode);
 
@@ -30,6 +33,9 @@ void addInTail(List* list, Value value, int* errorCode);
 
 // Delete element by position
 void removeElement(List* list, Position position);
+
+// Delete element without erasing values
+void removeElementWithoutErasingValues(List* list, Position position);
 
 // Get element address by position
 Position getElement(List* list, int index);

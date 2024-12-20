@@ -32,7 +32,7 @@ bool testGraph() {
         getNodeName(getTheNearestElement(wrapFindNodeInGraph(graph, 10, &errorCode))) == 54) {
         result = true;
     }
-
+    wrapFindTheNearestUnoccupiedCity(wrapFindNodeInGraph(graph, 1, &errorCode), &errorCode);
     wrapDeleteGraph(graph, &errorCode);
     return result && errorCode == 0;
 }

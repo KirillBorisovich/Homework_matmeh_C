@@ -50,6 +50,9 @@ int getGraphSize(Graph* graph) {
 }
 
 void findNodeInGraph(Node* node, Node** findNode, int name, List* list, int* errorCode) {
+    if (*findNode != NULL) {
+        return;
+    }
     Value value = { node, 0 };
     addInHead(list, value, errorCode);
     if (node->name == name) {
@@ -195,30 +198,37 @@ void deleteGraph(Node* node, List* list, int* errorCode) {
     free(node);
 }
 
-Node* findTheNearestUnoccupiedCity(Node* node, List* list, bool* found, int* errorCode) {
-    if (nodeInList(list, node)) {
+void findTheNearestUnoccupiedCity(Node* node, List* visited,
+    List* queue, bool* found, int* errorCode) {
+    removeElementWithoutErasingValues(queue, last(queue));
+    if (isEmpty(queue) || nodeInList(visited, node)) {
         return;
     }
-    Value value = { node, 0 };
-    addInHead(list, value, errorCode);
-    if (isEmpty(node->matchList)) {
-        return;
-    }
-    Position positon = first(node->matchList);
-    while (next(positon) != NULL) {
-        Node* valueNode = getValue(node->matchList, positon).node;
-        if (!nodeInList(list, valueNode)) {
-            depthFirstTraversalOfAGraph(valueNode, list, errorCode);
+    printf("%d\n", node->name);
+    Value valueVisited = { node, 0 };
+    addInHead(visited, valueVisited, errorCode);
+    Position position = first(node->matchList);
+    while (next(position) != NULL) {
+        Value value = { getValue(node->matchList, position).node , 0 };
+        if (!nodeInList(visited, getValue(node->matchList, position).node)) {
+            addInHead(queue, value, errorCode);
         }
-        positon = next(positon);
+        position = next(position);
     }
 }
 
 Node* wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode) {
     bool found = false;
-    List* list = createList(errorCode);
-    findTheNearestUnoccupiedCity(node, list, &found, errorCode);
-    deleteListWithoutErasingValues(list);
+    List* visited = createList(errorCode);
+    List* queue = createList(errorCode);
+    Value value = { node, 0 };
+    addInHead(queue, value, errorCode);
+    while (!isEmpty(queue)) {
+        Node* tmp = getValue(queue, last(queue)).node;
+        findTheNearestUnoccupiedCity(tmp, visited, queue, &found, errorCode);
+    }
+    deleteListWithoutErasingValues(visited);
+    deleteListWithoutErasingValues(queue);
 }
 
 void wrapDeleteGraph(Graph* graph, int* errorCode) {

@@ -33,5 +33,7 @@ Node* getTheNearestElement(Node* node);
 // Go deep
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode);
 
+Node* wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode);
+
 // Delete graph
 void wrapDeleteGraph(Graph* graph, int* errorCode);

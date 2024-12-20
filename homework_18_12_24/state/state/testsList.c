@@ -42,11 +42,12 @@ bool testAddInTail() {
     addInTail(list, value1, &errorCode);
     addInTail(list, value2, &errorCode);
     addInTail(list, value3, &errorCode);
-    bool result = getValue(list, first(list)).length == 1 ? true : false;
-    removeElement(list, first(list));
-    result = getValue(list, first(list)).length == 2 ? true : false;
-    removeElement(list, first(list));
-    result = getValue(list, first(list)).length == 3 ? true : false;
+    bool result = getValue(list, last(list)).length == 3 ? true : false;
+    removeElement(list, last(list));
+    result = getValue(list, last(list)).length == 2 ? true : false;
+    removeElement(list, last(list));
+    result = getValue(list, last(list)).length == 1 ? true : false;
+    removeElement(list, last(list));
     deleteList(list);
     return result && errorCode == 0;
 }

@@ -3,10 +3,11 @@
 #include <stdbool.h>
 #include "graph.h"
 #include "readingFromFile.h"
+#include "testsList.h"
 #include "testsGraph.h"
 
 int main(void) {
-    if (!testGraph()) {
+    if (!testGraph() || !testList()) {
         printf("Test failed!\n");
         return 123;
     }
