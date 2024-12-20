@@ -43,9 +43,8 @@ void fillingThreeVariablesFromAString(char* buffer, char* name1, char* name2, ch
     }
 }
 
-void readingFromFile(FILE* file, Graph* graph, int* errorCode) {
+void readingFromFile(FILE* file, Graph* graph, Graph* capitals, int* errorCode) {
     char buffer[100] = { '\0' };
-
     while (true) {
         if (fgets(buffer, 100, file) != NULL) {
             buffer[strcspn(buffer, "\n")] = 0;
@@ -64,18 +63,23 @@ void readingFromFile(FILE* file, Graph* graph, int* errorCode) {
                 if (fgets(buffer, 100, file) != NULL) {
                     buffer[strcspn(buffer, "\n")] = 0;
                     char name[30] = { '\0' };
-                    int index = 0;
-                    while (buffer[index] != '\0') {
-                        if (buffer[index] != ' ') {
-                            name[index] = buffer[index];
+                    int indexBuffer = 0, indexName = 0;
+                    while (buffer[indexBuffer] != '\0') {
+                        if (buffer[indexBuffer] != ' ') {
+                            name[indexName] = buffer[indexBuffer];
+                            ++indexBuffer;
+                            ++indexName;
                         }
                         else {
                             int intName = strtol(name, NULL, 10);
-                            Node* node = findNodeInGraph(graph, intName);
-                            if (node == NULL) {
-                                node = createNode(intName, errorCode);
+                            Node* node = wrapFindNodeInGraph(graph, intName, errorCode);
+                            addElementToGraph(capitals, node, errorCode);
+                            int nameLen = strlen(name);
+                            for (int i = 0; i < nameLen; ++i) {
+                                name[i] = '\0';
                             }
-                            addElementToGraph(graph, node, errorCode);
+                            indexName = 0;
+                            ++indexBuffer;
                         }
                     }
                 }

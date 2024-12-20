@@ -16,6 +16,7 @@ typedef struct List {
 
 typedef struct Node {
     int name;
+    int stateNumber;
     List* matchList;
 } Node;
 

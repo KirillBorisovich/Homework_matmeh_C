@@ -3,10 +3,12 @@
 #include <stdbool.h>
 #include "graph.h"
 #include "readingFromFile.h"
+#include "testStack.h"
+#include "testQueue.h"
 #include "testsGraph.h"
 
 int main(void) {
-    if (!testGraph()) {
+    if (!testStack() || !testQueue() || !testGraph()) {
         printf("Test failed!\n");
         return 123;
     }
@@ -18,8 +20,8 @@ int main(void) {
         printf("Memory allocation error\n");
         return 1;
     }
-    readingFromFile(file, graph, errorCode);
+    //readingFromFile(file, graph, errorCode);
     fclose(file);
-    wrapDepthFirstTraversalOfAGraph(wrapFindNodeInGraph(graph, 10, &errorCode), &errorCode);
+    
 
 }

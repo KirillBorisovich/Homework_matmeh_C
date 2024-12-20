@@ -4,9 +4,9 @@
 #include "list.h"
 #include "graph.h"
 
-
 typedef struct Node {
     int name;
+    int stateNumber;
     List* matchList;
 } Node;
 
@@ -22,6 +22,7 @@ Node* createNode(int name, int* errorCode) {
         return NULL;
     }
     node->name = name;
+    node->stateNumber = -1111;
     node->matchList = createList(errorCode);
     return node;
 }
@@ -163,7 +164,6 @@ void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
         }
         positon = next(positon);
     }
-
 }
 
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode) {
@@ -193,6 +193,32 @@ void deleteGraph(Node* node, List* list, int* errorCode) {
     }
     deleteListWithoutErasingValues(node->matchList);
     free(node);
+}
+
+Node* findTheNearestUnoccupiedCity(Node* node, List* list, bool* found, int* errorCode) {
+    if (nodeInList(list, node)) {
+        return;
+    }
+    Value value = { node, 0 };
+    addInHead(list, value, errorCode);
+    if (isEmpty(node->matchList)) {
+        return;
+    }
+    Position positon = first(node->matchList);
+    while (next(positon) != NULL) {
+        Node* valueNode = getValue(node->matchList, positon).node;
+        if (!nodeInList(list, valueNode)) {
+            depthFirstTraversalOfAGraph(valueNode, list, errorCode);
+        }
+        positon = next(positon);
+    }
+}
+
+Node* wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode) {
+    bool found = false;
+    List* list = createList(errorCode);
+    findTheNearestUnoccupiedCity(node, list, &found, errorCode);
+    deleteListWithoutErasingValues(list);
 }
 
 void wrapDeleteGraph(Graph* graph, int* errorCode) {
