@@ -22,6 +22,7 @@ HashTable* createHashTable(size_t size, int* errorCode) {
         return NULL;
     }
     hashTable->size = size;
+    hashTable->numberOfElements = 0;
     return hashTable;
 }
 
@@ -53,18 +54,20 @@ void addElement(HashTable* hashTable, char* string, int* errorCode) {
         *errorCode = 2;
         return;
     }
-    else if (hashCountSearchFunction(hashTable, hashFunction(string), string)) {
+    int hash = hashFunction(string);
+    if (hashCountSearchFunction(hashTable, hash, string)) {
         return;
     }
-    int index = hashFunction(string) % hashTable->size;
+    int index = hash % hashTable->size;
     while (hashTable->array[index] != NULL) {
         index = (index + 1) % hashTable->size;
     }
     hashTable->array[index] = string;
+    ++hashTable->numberOfElements;
 }
 
 bool findElement(HashTable* hashTable, char* string) {
-    hashCountSearchFunction(hashTable, hashFunction(string), string);
+    return hashCountSearchFunction(hashTable, hashFunction(string), string);
 }
 
 void deleteHahsTable(HashTable* hashTable) {
@@ -73,4 +76,6 @@ void deleteHahsTable(HashTable* hashTable) {
             free(hashTable->array[i]);
         }
     }
+    free(hashTable->array);
+    free(hashTable);
 }
