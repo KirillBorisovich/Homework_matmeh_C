@@ -130,24 +130,16 @@
     <ClCompile Include="graph.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="queue.c" />
     <ClCompile Include="readingFromFile.c" />
-    <ClCompile Include="stack.c" />
-    <ClCompile Include="testQueue.c" />
     <ClCompile Include="testsGraph.c" />
     <ClCompile Include="testsList.c" />
-    <ClCompile Include="testStack.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graph.h" />
     <ClInclude Include="list.h" />
-    <ClInclude Include="queue.h" />
     <ClInclude Include="readingFromFile.h" />
-    <ClInclude Include="stack.h" />
-    <ClInclude Include="testQueue.h" />
     <ClInclude Include="testsGraph.h" />
     <ClInclude Include="testsList.h" />
-    <ClInclude Include="testStack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
