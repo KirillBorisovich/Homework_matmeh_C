@@ -6,7 +6,7 @@
 #include "readingFromFile.h"
 
 int numberOfSpacesInALine(char* string) {
-    int stringLen = strlen(string);
+    size_t stringLen = strlen(string);
     int counter = 0, index = 0;
     while (string[index] != '\0') {
         if (string[index] == ' ') {
@@ -20,7 +20,7 @@ int numberOfSpacesInALine(char* string) {
 void fillingThreeVariablesFromAString(char* buffer, char* name1, char* name2, char* name3) {
     int index = 0, name1Index = 0, name2Index = 0, name3Index = 0;
     int counter = 0;
-    while (buffer[index] != NULL) {
+    while (buffer[index] != 0) {
         if (buffer[index] == ' ') {
             ++counter;
             ++index;
@@ -60,8 +60,15 @@ void readingFromFile(FILE* file, Graph* graph, Graph* capitals, int* errorCode) 
                     strtol(arrivalPoint, NULL, 10), strtol(length, NULL, 10), errorCode);
             }
             else if (numberOfSpacesInAString == 0) {
+                char numberOfCities[30] = { '\0' };
+                char plug1[30] = { '\0' };
+                fillingThreeVariablesFromAString(
+                    buffer, numberOfCities,
+                    plug1, NULL);
+                writeDownTheNumberOfCities(capitals, strtol(numberOfCities, NULL, 10));
                 if (fgets(buffer, 100, file) != NULL) {
                     buffer[strcspn(buffer, "\n")] = 0;
+                    buffer[strlen(buffer)] = ' ';
                     char name[30] = { '\0' };
                     int indexBuffer = 0, indexName = 0;
                     while (buffer[indexBuffer] != '\0') {
@@ -74,7 +81,7 @@ void readingFromFile(FILE* file, Graph* graph, Graph* capitals, int* errorCode) 
                             int intName = strtol(name, NULL, 10);
                             Node* node = wrapFindNodeInGraph(graph, intName, errorCode);
                             addElementToGraph(capitals, node, errorCode);
-                            int nameLen = strlen(name);
+                            size_t nameLen = strlen(name);
                             for (int i = 0; i < nameLen; ++i) {
                                 name[i] = '\0';
                             }
@@ -83,6 +90,14 @@ void readingFromFile(FILE* file, Graph* graph, Graph* capitals, int* errorCode) 
                         }
                     }
                 }
+            }
+            else if (numberOfSpacesInAString == 1) {
+                char numberOfCities[30] = { '\0' };
+                char plug1[30] = { '\0' };
+                fillingThreeVariablesFromAString(
+                    buffer, numberOfCities,
+                    plug1, NULL);
+                writeDownTheNumberOfCities(graph, strtol(numberOfCities, NULL, 10));
             }
         }
         else {

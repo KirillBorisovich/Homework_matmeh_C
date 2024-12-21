@@ -12,7 +12,8 @@ typedef struct Node {
 
 typedef struct Graph {
     Node** peaks;
-    int size;
+    size_t size;
+    size_t numberOfCities;
 } Graph;
 
 Node* createNode(int name, int* errorCode) {
@@ -31,11 +32,16 @@ Graph* createGraph(int* errorCode) {
     Graph* graph = calloc(1, sizeof(Graph));
     graph->peaks = calloc(10, sizeof(Node*));
     graph->size = 10;
+    graph->numberOfCities = 0;
     if (graph == NULL || graph->peaks == NULL) {
         *errorCode = 1;
         return NULL;
     }
     return graph;
+}
+
+void writeDownTheNumberOfCities(Graph* graph, size_t numberOfCities) {
+    graph->numberOfCities = numberOfCities;
 }
 
 int getNodeName(Node* node) {
@@ -45,7 +51,7 @@ int getNodeName(Node* node) {
     return node->name;
 }
 
-int getGraphSize(Graph* graph) {
+size_t getGraphSize(Graph* graph) {
     return graph->size;
 }
 
@@ -150,12 +156,15 @@ Node* getTheNearestElement(Node* node) {
     return result;
 }
 
-void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
+void depthFirstTraversalOfAGraph(Node* node, int stateNumber, List* list, int* errorCode) {
     if (nodeInList(list, node)) {
         return;
     }
     Value value = { node, 0 };
     addInHead(list, value, errorCode);
+    if (node->stateNumber == stateNumber) {
+        printf("%d ", node->name);
+    }
     if (isEmpty(node->matchList)) {
         return;
     }
@@ -163,16 +172,80 @@ void depthFirstTraversalOfAGraph(Node * node, List* list, int* errorCode) {
     while (next(positon) != NULL) {
         Node* valueNode = getValue(node->matchList, positon).node;
         if (!nodeInList(list, valueNode)) {
-            depthFirstTraversalOfAGraph(valueNode, list, errorCode);
+            depthFirstTraversalOfAGraph(valueNode, stateNumber, list, errorCode);
         }
         positon = next(positon);
     }
 }
 
 void wrapDepthFirstTraversalOfAGraph(Node* node, int* errorCode) {
+    int stateNumber = node->stateNumber;
     List* list = createList(errorCode);
-    depthFirstTraversalOfAGraph(node, list, errorCode);
+    depthFirstTraversalOfAGraph(node, stateNumber,list, errorCode);
     deleteListWithoutErasingValues(list);
+}
+
+void findTheNearestUnoccupiedCity(Value value, int stateNumber, List* visited,
+    List* queue, int* errorCode) {
+    removeElementWithoutErasingValues(queue, last(queue));
+    if (nodeInList(visited, value.node)) {
+        return;
+    }
+    Value valueVisited = value;
+    addInHead(visited, valueVisited, errorCode);
+    if (value.node->stateNumber != stateNumber) {
+        return;
+    }
+    Position position = first(value.node->matchList);
+    while (next(position) != NULL) {
+        Value tmp = getValue(value.node->matchList, position);
+        Value valueFromQueue = { tmp.node, 1000000 };
+        if (valueFromQueue.length > tmp.length + value.length) {
+            valueFromQueue.length = tmp.length + value.length;
+        }
+        if (!nodeInList(visited, valueFromQueue.node) && 
+            (valueFromQueue.node->stateNumber == -1111 || 
+                valueFromQueue.node->stateNumber == value.node->stateNumber)) {
+            addInHead(queue, valueFromQueue, errorCode);
+        }
+        position = next(position);
+    }
+}
+
+void nodeWithMinimumLength(List* list, Node* parent) {
+    int min = 100000000;
+    Node* result = NULL;
+    Position position = first(list);
+    while (next(position) != NULL) {
+        Value tmp = getValue(list, position);
+        if (tmp.length < min && tmp.node->stateNumber == -1111 &&
+            parent != tmp.node) {
+            min = tmp.length;
+            result = tmp.node;
+        }
+        position = next(position);
+    }
+    if (result == NULL) {
+        return NULL;
+    }
+    result->stateNumber = parent->name;
+    return result;
+}
+
+void wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode) {
+    node->stateNumber = node->name;
+    int stateNumber = node->stateNumber;
+    List* visited = createList(errorCode);
+    List* queue = createList(errorCode);
+    Value value = { node, 0 };
+    addInHead(queue, value, errorCode);
+    while (!isEmpty(queue)) {
+        Value tmp = getValue(queue, last(queue));
+        findTheNearestUnoccupiedCity(tmp, stateNumber, visited, queue, errorCode);
+    }
+    nodeWithMinimumLength(visited, node);
+    deleteListWithoutErasingValues(visited);
+    deleteListWithoutErasingValues(queue);
 }
 
 void deleteGraph(Node* node, List* list, int* errorCode) {
@@ -198,70 +271,29 @@ void deleteGraph(Node* node, List* list, int* errorCode) {
     free(node);
 }
 
-void findTheNearestUnoccupiedCity(Value value, int stateNumber, List* visited,
-    List* queue, int* errorCode) {
-    removeElementWithoutErasingValues(queue, last(queue));
-    if (nodeInList(visited, value.node)) {
-        return;
-    }
-    Value valueVisited = value;
-    addInHead(visited, valueVisited, errorCode);
-    if (value.node->stateNumber != stateNumber) {
-        return;
-    }
-    Position position = first(value.node->matchList);
-    while (next(position) != NULL) {
-        Value tmp = getValue(value.node->matchList, position);
-        Value valueFromQueue = { tmp.node, 1000000 };
-        if (valueFromQueue.length > tmp.length + value.length) {
-            valueFromQueue.length = tmp.length + value.length;
+void assignCitiesToStates(Graph* graph, Graph* captails, int* errorCode) {
+    for (int i = 0; i < graph->numberOfCities / captails->numberOfCities; ++i) {
+        for (int j = 0; j < captails->numberOfCities; ++j) {
+            wrapFindTheNearestUnoccupiedCity(captails->peaks[j], errorCode);
         }
-        if (!nodeInList(visited, valueFromQueue.node)) {
-            addInHead(queue, valueFromQueue, errorCode);
-        }
-        position = next(position);
     }
 }
 
-Node* nodeWithMinimumLength(List* list, Node* parent) {
-    int min = 100000000;
-    Node* result = NULL;
-    Position position = first(list);
-    while (next(position) != NULL) {
-        Value tmp = getValue(list, position);
-        if (tmp.length < min && tmp.node->stateNumber == -1111 &&
-            parent != tmp.node) {
-            min = tmp.length;
-            result = tmp.node;
-        }
-        position = next(position);
+void printStates(Graph* graph, int* errorCode) {
+    for (int i = 0; i < graph->numberOfCities; ++i) {
+        printf("State number: %d\n Cities: ", graph->peaks[i]->name);
+        wrapDepthFirstTraversalOfAGraph(graph->peaks[i], errorCode);
+        printf("\n");
     }
-    if (result == NULL) {
-        return NULL;
-    }
-    result->stateNumber = parent->name;
-    return result;
-}
-
-Node* wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode) {
-    node->stateNumber = node->name;
-    int stateNumber = node->stateNumber;
-    List* visited = createList(errorCode);
-    List* queue = createList(errorCode);
-    Value value = { node, 0 };
-    addInHead(queue, value, errorCode);
-    while (!isEmpty(queue)) {
-        Value tmp = getValue(queue, last(queue));
-        findTheNearestUnoccupiedCity(tmp, stateNumber, visited, queue, errorCode);
-    }
-    Node* result = nodeWithMinimumLength(visited, node);
-    deleteListWithoutErasingValues(visited);
-    deleteListWithoutErasingValues(queue);
-    return result;
 }
 
 void wrapDeleteGraph(Graph* graph, int* errorCode) {
     List* list = createList(errorCode);
     deleteGraph(graph->peaks[0], list, errorCode);
     deleteListWithoutErasingValues(list);
+}
+
+void deleteGraphWithoutContent(Graph* graph) {
+    free(graph->peaks);
+    free(graph);
 }

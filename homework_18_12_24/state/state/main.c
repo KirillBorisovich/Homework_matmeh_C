@@ -14,13 +14,24 @@ int main(void) {
 
     int errorCode = 0;
     Graph* graph = createGraph(&errorCode);
+    Graph* capitals = createGraph(&errorCode);
+
     FILE* file = fopen("input.txt", "r");
     if (file == NULL) {
         printf("Memory allocation error\n");
         return 1;
     }
-    //readingFromFile(file, graph, errorCode);
+    readingFromFile(file, graph, capitals, &errorCode);
     fclose(file);
     
+    assignCitiesToStates(graph, capitals, &errorCode);
+    printStates(capitals, &errorCode);
 
+    wrapDeleteGraph(graph, &errorCode);
+    deleteGraphWithoutContent(capitals);
+    
+    if (errorCode == 1) {
+        printf("Memory allocation error!\n");
+        return 1;
+    }
 }

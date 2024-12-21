@@ -32,9 +32,8 @@ bool testGraph() {
         getNodeName(getTheNearestElement(wrapFindNodeInGraph(graph, 10, &errorCode))) == 54) {
         result = true;
     }
-    Node* node = wrapFindTheNearestUnoccupiedCity(
-        wrapFindNodeInGraph(graph, 1, &errorCode), &errorCode);
-    printf("%d\n", getNodeName(node));
+    assignCitiesToStates(graph, capitals, &errorCode);
     wrapDeleteGraph(graph, &errorCode);
+    deleteGraphWithoutContent(capitals);
     return result && errorCode == 0;
 }
