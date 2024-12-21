@@ -198,37 +198,66 @@ void deleteGraph(Node* node, List* list, int* errorCode) {
     free(node);
 }
 
-void findTheNearestUnoccupiedCity(Node* node, List* visited,
-    List* queue, bool* found, int* errorCode) {
+void findTheNearestUnoccupiedCity(Value value, int stateNumber, List* visited,
+    List* queue, int* errorCode) {
     removeElementWithoutErasingValues(queue, last(queue));
-    if (isEmpty(queue) || nodeInList(visited, node)) {
+    if (nodeInList(visited, value.node)) {
         return;
     }
-    printf("%d\n", node->name);
-    Value valueVisited = { node, 0 };
+    Value valueVisited = value;
     addInHead(visited, valueVisited, errorCode);
-    Position position = first(node->matchList);
+    if (value.node->stateNumber != stateNumber) {
+        return;
+    }
+    Position position = first(value.node->matchList);
     while (next(position) != NULL) {
-        Value value = { getValue(node->matchList, position).node , 0 };
-        if (!nodeInList(visited, getValue(node->matchList, position).node)) {
-            addInHead(queue, value, errorCode);
+        Value tmp = getValue(value.node->matchList, position);
+        Value valueFromQueue = { tmp.node, 1000000 };
+        if (valueFromQueue.length > tmp.length + value.length) {
+            valueFromQueue.length = tmp.length + value.length;
+        }
+        if (!nodeInList(visited, valueFromQueue.node)) {
+            addInHead(queue, valueFromQueue, errorCode);
         }
         position = next(position);
     }
 }
 
+Node* nodeWithMinimumLength(List* list, Node* parent) {
+    int min = 100000000;
+    Node* result = NULL;
+    Position position = first(list);
+    while (next(position) != NULL) {
+        Value tmp = getValue(list, position);
+        if (tmp.length < min && tmp.node->stateNumber == -1111 &&
+            parent != tmp.node) {
+            min = tmp.length;
+            result = tmp.node;
+        }
+        position = next(position);
+    }
+    if (result == NULL) {
+        return NULL;
+    }
+    result->stateNumber = parent->name;
+    return result;
+}
+
 Node* wrapFindTheNearestUnoccupiedCity(Node* node, int* errorCode) {
-    bool found = false;
+    node->stateNumber = node->name;
+    int stateNumber = node->stateNumber;
     List* visited = createList(errorCode);
     List* queue = createList(errorCode);
     Value value = { node, 0 };
     addInHead(queue, value, errorCode);
     while (!isEmpty(queue)) {
-        Node* tmp = getValue(queue, last(queue)).node;
-        findTheNearestUnoccupiedCity(tmp, visited, queue, &found, errorCode);
+        Value tmp = getValue(queue, last(queue));
+        findTheNearestUnoccupiedCity(tmp, stateNumber, visited, queue, errorCode);
     }
+    Node* result = nodeWithMinimumLength(visited, node);
     deleteListWithoutErasingValues(visited);
     deleteListWithoutErasingValues(queue);
+    return result;
 }
 
 void wrapDeleteGraph(Graph* graph, int* errorCode) {

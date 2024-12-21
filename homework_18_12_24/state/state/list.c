@@ -106,8 +106,15 @@ void removeElement(List* list, Position position) {
 void removeElementWithoutErasingValues(List* list, Position position) {
     ListElement* tmp = position->next;
     if (position == list->tail) {
-        list->tail = list->tail->previous;
-        position->next = NULL;
+        if (list->size >= 2) {
+            position->next = NULL;
+            list->tail = list->size == 2 ? list->head->next : list->tail->previous;
+        }
+        else if (list->size <= 1) {
+            list->head->next = NULL;
+            list->tail = list->head->next;
+            tmp = position;
+        }
     }
     else {
         position->next = position->next->next;
