@@ -16,8 +16,7 @@ int readFromFile(FILE *file, int **array, size_t *length, int *errorCode) {
         }
         else {
             if (strcmp(buffer, "")) {
-                printf("%d", *array[numberOfNumbers]);
-                *array[numberOfNumbers] = strtol(buffer, NULL, 10);
+                (*array)[numberOfNumbers] = strtol(buffer, NULL, 10);
                 ++numberOfNumbers;
                 if (numberOfNumbers == *length - 1) {
                     int* tmp = realloc(*array, *length * 2 * sizeof(int));
