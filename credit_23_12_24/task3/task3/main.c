@@ -26,19 +26,41 @@ int** readingFromFile(FILE* file, int* numberOfVertices, int* errorCode) {
     return array;
 }
 
-void getAccessVertices(int** array, int* numberOfVertices, int* resultArray,
+void floydAlgorithm(int** array, int numberOfVertices) {
+    for (int k = 0; k < numberOfVertices; ++k) {
+        for (int i = 0; i < numberOfVertices; ++i) {
+            for (int j = 0; j < numberOfVertices; ++j) {
+                if (array[i][j] > array[i][k] + array[k][j]) {
+                    array[i][j] = array[i][k] + array[k][j];
+                }
+            }
+        }
+    }
+}
+
+//bool nodeIsReachable(int** array, int numberOfVertices) {
+//    for (int i = 0; i < numberOfVertices; ++i) {
+//        for (int j = 0; j < numberOfVertices; ++j) {
+//
+//        }
+//    }
+//}
+
+void getAccessVertices(int** array, int numberOfVertices, int* resultArray,
     int* numberOfAnswers, int* errorCode) {
     if (array == NULL || resultArray == NULL) {
         *errorCode = 2;
         return;
     }
     size_t indexResultArray = 0;
-    for (int i = 0; i < *numberOfVertices; ++i) {
+    for (int i = 0; i < numberOfVertices; ++i) {
         int counter = 0;
-        for (int j = 0; j < *numberOfVertices; ++j) {
-            counter += array[i][j];
+        for (int j = 0; j < numberOfVertices; ++j) {
+            if (array[i][j] == 0) {
+                ++counter;
+            }
         }
-        if (counter == *numberOfVertices - 1) {
+        if (counter == 1) {
             resultArray[indexResultArray] = i;
             ++(*numberOfAnswers);
             ++indexResultArray;
@@ -68,7 +90,8 @@ bool testProgram() {
         deleteArray(testArray, numberOfVertices);
         return false;
     }
-    getAccessVertices(testArray, &numberOfVertices, resultArray, &numberOfAnswers, &errorCode);
+    floydAlgorithm(testArray, numberOfVertices);
+    getAccessVertices(testArray, numberOfVertices, resultArray, &numberOfAnswers, &errorCode);
     for (int i = 0; i < numberOfAnswers; ++i) {
         if (referenceArray[i] != resultArray[i]) {
             result = false;
@@ -95,7 +118,8 @@ int main() {
         deleteArray(array, numberOfVertices);
         return 1;
     }
-    getAccessVertices(array, &numberOfVertices, resultArray, &numberOfAnswers, &errorCode);
+    floydAlgorithm(array, numberOfVertices);
+    getAccessVertices(array, numberOfVertices, resultArray, &numberOfAnswers, &errorCode);
     if (errorCode != 0) {
         deleteArray(array, numberOfVertices);
         free(resultArray);
