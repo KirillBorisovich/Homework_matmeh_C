@@ -19,7 +19,10 @@ bool testProgram() {
     int errorCode = 0;
     int array[] = { 10, 7, 6, 8, 2, 4, 6, 4, 8, 1 };
     int sortedArray[] = { 1, 2, 4, 4, 6, 6, 7, 8, 8, 10 };
+    int arrayOfOneElement[] = { 1 };
     int length = 10;
     selectionSort(array, length, &errorCode);
-    return arrayComparison(array, sortedArray, length, &errorCode) && errorCode == 0;
+    selectionSort(arrayOfOneElement, 1, &errorCode);
+    selectionSort(NULL, 1, &errorCode);
+    return arrayComparison(array, sortedArray, length, &errorCode) && errorCode == 1;
 }

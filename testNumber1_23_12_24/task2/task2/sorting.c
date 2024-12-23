@@ -1,4 +1,7 @@
+#include "sorting.h"
+
 #include <stdio.h>
+#include <limits.h>
 
 void swap(int* left, int* right) {
     if (left != right) {
@@ -14,7 +17,7 @@ void selectionSort(int* array, int length, int* errorCode) {
         return;
     }
     for (int i = 0; i < length - 1; ++i) {
-        int minElement = 999999999;
+        int minElement = INT_MAX;
         int minElementIndex = 0;
         for (int j = i + 1; j < length; ++j) {
             if (array[j] < minElement) {
