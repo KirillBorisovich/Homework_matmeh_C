@@ -38,14 +38,6 @@ void floydAlgorithm(int** array, int numberOfVertices) {
     }
 }
 
-//bool nodeIsReachable(int** array, int numberOfVertices) {
-//    for (int i = 0; i < numberOfVertices; ++i) {
-//        for (int j = 0; j < numberOfVertices; ++j) {
-//
-//        }
-//    }
-//}
-
 void getAccessVertices(int** array, int numberOfVertices, int* resultArray,
     int* numberOfAnswers, int* errorCode) {
     if (array == NULL || resultArray == NULL) {
